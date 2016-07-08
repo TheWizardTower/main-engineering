@@ -1,0 +1,78 @@
+---
+ - hosts: all
+   tasks:
+   - name: Ensure docker group is present.
+     group: name=docker state=present
+
+   - name: Install packaged development tools.
+     dnf: name={{ item }} state=present
+     with_items:
+       - ack
+       - colordiff
+       - cabal-rpm
+       - clojure
+       - emacs
+       - dash
+       - fish
+       - haskell-platform
+       - hlint
+       - git
+       - git-svn
+       - golang
+       - htop
+       - levien-inconsolata-fonts
+       - iftop
+       - iotop
+       - irssi
+       - lynx
+       - mercurial
+       - mc
+       - ncurses-compat-libs-6.0-5.20160116.fc24.x86_64
+       - ntop
+       - perl-core
+       - perl-criticism
+       - perltidy
+       - python
+       - PyYAML
+       - rpmlint
+       - screen
+       - stack
+       - strace
+       - subversion
+       - the_silver_searcher
+       - tmux
+       - vim-enhanced
+       - vim-X11
+       - zsh
+  
+   - name: Checkout dotfiles repo.
+     become: true
+     become_user: amccullough
+     git: repo=https://github.com/TheWizardTower/dotfiles.git
+          dest=/home/amccullough/dotfiles
+          accept_hostkey=true
+          update=yes
+  
+   # Need to make the ~/git dir
+   - name: Checkout useful git repos.
+     become: true
+     become_user: amccullough
+     git: repo={{ item }}
+          accept_hostkey=true
+          dest=/home/amccullough/git/{{ item }}
+          update=yes
+     with_items:
+       - https://github.com/powerline/fonts.git
+       - https://github.com/garabik/grc.git
+       - https://github.com/junegunn/fzf.git
+     
+   - name: Setup dotfiles repo.
+     become: true
+     become_user: amccullough
+     shell: "/home/amccullough/dotfiles/install.sh"
+     args:
+       chdir: /home/amccullough/dotfiles
+  
+   - name: Update packages.
+     dnf: name=* state=latest
+  

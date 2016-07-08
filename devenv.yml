@@ -1,0 +1,12 @@
+---
+- name: Set up my dev environment
+  hosts: dev-environment
+  remote_user: root
+  # remote_user: user
+  # sudo: yes
+
+  roles:
+    - dev-environment
+    - photography
+    - gaming
+    - 
