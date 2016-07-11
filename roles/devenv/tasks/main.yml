@@ -4,6 +4,23 @@
    - name: Ensure docker group is present.
      group: name=docker state=present
 
+   - name: Setup Adobe yum repo.
+     shell: '/usr/bin/rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm ||:'
+
+   - name: Setup Google Chrome repo file.
+     copy: src=/home/amccullough/git/ansible/chrome.repo dest=/etc/yum.repos.d/google-chrome.repo owner=root group=root mode=0644
+
+   - name: Import Google Chrome public key.
+     shell: '/bin/rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub'
+
+   - name: Create a plasma configuration directory.
+     become: true
+     become_user: amccullough
+     shell: '/bin/mkdir -p /home/amccullough/.config/plasma-workspace/env status=directory'
+
+   - name: Create a file to set KDEs default window manager to xmonad.
+     copy: src=/home/amccullough/ansible/set_window_manager.sh dest=/home/amccullough/
+
    - name: Install packaged development tools.
      dnf: name={{ item }} state=present
      with_items:
@@ -44,15 +61,86 @@
        - vim-enhanced
        - vim-X11
        - zsh
+
+   - name: Install packaged desktop tools.
+     dnf: name={{ item }}
+          state=present
+     with_items:
+       - amarok-utils
+       - cairo-dock
+       - cowsay
+       - dmenu
+       - darktable
+       - digikam
+       - dkms
+       - docker-io
+       - dzen2
+       - fedup
+       - firefox
+       - flash-plugin
+       - free42
+       - fortune
+       - fortune-mod
+       - GraphicsMagick
+       - gimp
+       - google-chrome-stable # Needs the google chrome repo.
+       - gparted
+       - gpodder
+       - ImageMagick
+       - kernel-devel
+       - kernel-headers
+       - moc
+       - NetworkManager-tui
+       - paman
+       - paprefs
+       - pavucontrol
+       - pavumeter
+       - pidgin
+       - pidgin-otr
+       - purple-plugin-pack
+       - pv
+       - redshift
+       - seamonkey
+       - sl
+       - skype
+       - steam
+       - sysstat
+       - tigervnc
+       - ufraw
+       - unetbootin
+       - VirtualBox-5.0 # Needs the virtualbox repo.
+       - vlc
+       - vnstat
+       - xcompmgr
+       - xmonad
+       - xulrunner
+       - yakuake
   
    - name: Checkout dotfiles repo.
      become: true
      become_user: amccullough
-     git: repo=https://github.com/TheWizardTower/dotfiles.git
-          dest=/home/amccullough/dotfiles
+     git: repo={{ item }}
+          dest=/home/amccullough/{{ item }}
           accept_hostkey=true
           update=yes
-  
+     with_items:
+       - https://github.com/powerline/fonts.git
+       - https://github.com/junegunn/fzf.git
+       - https://github.com/TheWizardTower/dotfiles.git
+
+   - name: Checkout a copy of Spacemacs.
+     become: true
+     become_user: amccullough
+     git: repo=https://github.com/syl20bnr/spacemacs.git
+          dest=/home/amccullough/spacemacs/.emacs.d
+          accept_hostkey=true
+          update=yes
+
+   - name: Create ~/git
+     become: true
+     become_user: amccullough
+     file: path=/home/amccullough/git state=directory
+
    # Need to make the ~/git dir
    - name: Checkout useful git repos.
      become: true
@@ -60,12 +148,24 @@
      git: repo={{ item }}
           accept_hostkey=true
           dest=/home/amccullough/git/{{ item }}
-          update=yes
+          update=yes 
      with_items:
+       - https://github.com/agda/agda.git
+       - https://github.com/edc/bass.git
+       - https://github.com/DanielG/cabal-helper.git
+       - https://github.com/replicatedhq/dockerfilelint.git
        - https://github.com/powerline/fonts.git
-       - https://github.com/garabik/grc.git
        - https://github.com/junegunn/fzf.git
-     
+       - https://github.com/carlohamalainen/ghc-imported-from
+       - https://github.com/tj/git-extras.git
+       - https://github.com/unixorn/git-extra-commands.git
+       - https://github.com/garabik/grc.git
+       - https://github.com/alanz/HaRe.git
+       - https://github.com/LuRsT/hr.gi
+       - https://github.com/kanaka/mal.git
+       - https://github.com/kanaka/mal.workshop.git
+       - https://github.com/creichert/stack-tag.git
+
    - name: Setup dotfiles repo.
      become: true
      become_user: amccullough
