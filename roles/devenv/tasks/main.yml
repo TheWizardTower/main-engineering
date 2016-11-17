@@ -8,7 +8,7 @@
      shell: '/usr/bin/rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm ||:'
 
    - name: Setup Google Chrome repo file.
-     copy: src=/home/amccullough/git/ansible/chrome.repo dest=/etc/yum.repos.d/google-chrome.repo owner=root group=root mode=0644
+     copy: src=/home/amccullough/git/ansible/google-chrome.repo dest=/etc/yum.repos.d/google-chrome.repo owner=root group=root mode=0644
 
    - name: Import Google Chrome public key.
      shell: '/bin/rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub'
@@ -19,7 +19,7 @@
      shell: '/bin/mkdir -p /home/amccullough/.config/plasma-workspace/env status=directory'
 
    - name: Create a file to set KDEs default window manager to xmonad.
-     copy: src=/home/amccullough/ansible/set_window_manager.sh dest=/home/amccullough/
+     copy: src=/home/amccullough/git/ansible/set_window_manager.sh dest=/home/amccullough/.config/plasma-workspace/env
 
    - name: Install packaged development tools.
      dnf: name={{ item }} state=present
@@ -79,7 +79,6 @@
        - firefox
        - flash-plugin
        - free42
-       - fortune
        - fortune-mod
        - GraphicsMagick
        - gimp
@@ -87,9 +86,12 @@
        - gparted
        - gpodder
        - ImageMagick
+       - imlib2
+       - imlib2-devel
        - kernel-devel
        - kernel-headers
-       - moc
+       - libsrvg
+       - libsrvg-devel
        - NetworkManager-tui
        - paman
        - paprefs
@@ -116,7 +118,7 @@
        - xulrunner
        - yakuake
   
-   - name: Checkout dotfiles repo.
+   - name: Checkout utility repos.
      become: true
      become_user: amccullough
      git: repo={{ item }}
@@ -126,7 +128,15 @@
      with_items:
        - https://github.com/powerline/fonts.git
        - https://github.com/junegunn/fzf.git
-       - https://github.com/TheWizardTower/dotfiles.git
+
+
+   - name: Checkout Dotfiles repo.
+     become: true
+     become_user: amccullough
+     git: repo=https://github.com/TheWizardTower/dotfiles.git
+          dest=/home/amccullough/dotfiles
+          accept_hostkey=yes
+          update=no
 
    - name: Checkout a copy of Spacemacs.
      become: true
@@ -145,26 +155,26 @@
    - name: Checkout useful git repos.
      become: true
      become_user: amccullough
-     git: repo={{ item }}
+     git: repo={{ item.src }}
           accept_hostkey=true
-          dest=/home/amccullough/git/{{ item }}
+          dest=/home/amccullough/git/{{ item.dest }}
           update=yes 
      with_items:
-       - https://github.com/agda/agda.git
-       - https://github.com/edc/bass.git
-       - https://github.com/DanielG/cabal-helper.git
-       - https://github.com/replicatedhq/dockerfilelint.git
-       - https://github.com/powerline/fonts.git
-       - https://github.com/junegunn/fzf.git
-       - https://github.com/carlohamalainen/ghc-imported-from
-       - https://github.com/tj/git-extras.git
-       - https://github.com/unixorn/git-extra-commands.git
-       - https://github.com/garabik/grc.git
-       - https://github.com/alanz/HaRe.git
-       - https://github.com/LuRsT/hr.gi
-       - https://github.com/kanaka/mal.git
-       - https://github.com/kanaka/mal.workshop.git
-       - https://github.com/creichert/stack-tag.git
+       - { src: 'https://github.com/agda/agda.git', dest: 'agda' }
+       - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
+       - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
+       - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
+       - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
+       - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
+       - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
+       - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
+       - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
+       - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
+       - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
+       - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
+       - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshopo' }
+       - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
+       - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
    - name: Setup dotfiles repo.
      become: true
