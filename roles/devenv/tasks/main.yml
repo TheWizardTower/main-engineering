@@ -164,17 +164,23 @@
        - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
        - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
        - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
+       - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
        - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
        - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
-       - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
+       - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
        - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
+       - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
        - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
        - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
        - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
        - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
-       - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshopo' }
+       - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
        - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
+       - { src: 'https://github.com/thestinger/termite.git', dest: 'termite' }
        - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
+       - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
+       - { src: 'https://github.com/thestinger/vte-ng.git', dest: 'vte-ng' }
+       - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
 
    - name: Setup dotfiles repo.
      become: true
