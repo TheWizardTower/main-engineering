@@ -1,5 +1,5 @@
 ---
- - hosts: all
+ - hosts: localhost
    tasks:
    - name: Ensure docker group is present.
      group: name=docker state=present
@@ -7,8 +7,25 @@
    - name: Setup Adobe yum repo.
      shell: '/usr/bin/rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm ||:'
 
+   - name: Capture Fedora release number.
+     shell: '/bin/rpm -E %fedora'
+     register: rpm_release
+
+   - name: Enable RPMFusion
+     dnf: name=https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.sdtout }}.noarch.rpm state=latest
+     dnf: name=https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm state=latest
+
+   - name: Install libselinux.
+     dnf: name={{ item }} state=latest
+     with_items:
+       - libselinux-python
+       - libselinux-python3
+
    - name: Setup Google Chrome repo file.
-     copy: src=/home/amccullough/git/ansible/google-chrome.repo dest=/etc/yum.repos.d/google-chrome.repo owner=root group=root mode=0644
+     copy: src=~/git/main-engineering/google-chrome.repo dest=/etc/yum.repos.d/google-chrome.repo owner=root group=root mode=0644
+
+   - name: Setup VirtualBox Repo.
+     copy: src=~/git/main-engineering/VirtualBox.repo dest=/etc/yum.repos.d/VirtualBox.repo owner=root group=root mode=0644
 
    - name: Import Google Chrome public key.
      shell: '/bin/rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub'
@@ -16,10 +33,13 @@
    - name: Create a plasma configuration directory.
      become: true
      become_user: amccullough
-     shell: '/bin/mkdir -p /home/amccullough/.config/plasma-workspace/env status=directory'
+     shell: '/bin/mkdir -p /home/amccullough/.config/plasma-workspace/env'
 
    - name: Create a file to set KDEs default window manager to xmonad.
-     copy: src=/home/amccullough/git/ansible/set_window_manager.sh dest=/home/amccullough/.config/plasma-workspace/env
+     copy: src=~/git/main-engineering/set_window_manager.sh dest=/home/amccullough/.config/plasma-workspace/env
+
+   - name: Enable the Haskell Stack COPR repo.
+     shell: 'dnf copr enable petersen/stack -y'
 
    - name: Install packaged development tools.
      dnf: name={{ item }} state=present
@@ -44,7 +64,6 @@
        - lynx
        - mercurial
        - mc
-       - ncurses-compat-libs-6.0-5.20160116.fc24.x86_64
        - ntop
        - perl-core
        - perl-criticism
@@ -90,8 +109,6 @@
        - imlib2-devel
        - kernel-devel
        - kernel-headers
-       - libsrvg
-       - libsrvg-devel
        - NetworkManager-tui
        - paman
        - paprefs
@@ -104,13 +121,12 @@
        - redshift
        - seamonkey
        - sl
-       - skype
        - steam
        - sysstat
        - tigervnc
        - ufraw
        - unetbootin
-       - VirtualBox-5.0 # Needs the virtualbox repo.
+       - VirtualBox-5.1 # Needs the virtualbox repo.
        - vlc
        - vnstat
        - xcompmgr
@@ -118,18 +134,6 @@
        - xulrunner
        - yakuake
   
-   - name: Checkout utility repos.
-     become: true
-     become_user: amccullough
-     git: repo={{ item }}
-          dest=/home/amccullough/{{ item }}
-          accept_hostkey=true
-          update=yes
-     with_items:
-       - https://github.com/powerline/fonts.git
-       - https://github.com/junegunn/fzf.git
-
-
    - name: Checkout Dotfiles repo.
      become: true
      become_user: amccullough
@@ -165,6 +169,7 @@
        - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
        - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
        - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
+       - { src: 'https://github.com/powerline/fonts.git', dest: 'fonts' }
        - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
        - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
        - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
