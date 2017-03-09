@@ -47,6 +47,7 @@
        - ack
        - colordiff
        - cabal-rpm
+       - cargo
        - clojure
        - emacs
        - dash
@@ -71,6 +72,7 @@
        - python
        - PyYAML
        - rpmlint
+       - rust
        - screen
        - stack
        - strace
@@ -109,6 +111,7 @@
        - imlib2-devel
        - kernel-devel
        - kernel-headers
+       - ksnapshot
        - NetworkManager-tui
        - paman
        - paprefs
