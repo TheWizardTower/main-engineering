@@ -87,38 +87,40 @@
      dnf: name={{ item }}
           state=present
      with_items:
+       - GraphicsMagick
+       - ImageMagick
+       - NetworkManager-tui
+       - VirtualBox-5.1 # Needs the virtualbox repo.
        - amarok-utils
        - cairo-dock
        - cowsay
-       - dmenu
        - darktable
        - digikam
        - dkms
+       - dmenu
        - docker-io
        - dzen2
        - fedup
        - firefox
        - flash-plugin
-       - free42
        - fortune-mod
-       - GraphicsMagick
+       - free42
        - gimp
        - google-chrome-stable # Needs the google chrome repo.
        - gparted
        - gpodder
-       - ImageMagick
        - imlib2
        - imlib2-devel
        - kernel-devel
        - kernel-headers
        - ksnapshot
-       - NetworkManager-tui
        - paman
        - paprefs
        - pavucontrol
        - pavumeter
        - pidgin
        - pidgin-otr
+       - plasma-applet-redshift-control
        - purple-plugin-pack
        - pv
        - redshift
@@ -129,7 +131,6 @@
        - tigervnc
        - ufraw
        - unetbootin
-       - VirtualBox-5.1 # Needs the virtualbox repo.
        - vlc
        - vnstat
        - xcompmgr
