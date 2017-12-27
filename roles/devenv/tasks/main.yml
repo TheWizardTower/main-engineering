@@ -49,7 +49,9 @@
        - colordiff
        - cabal-rpm
        - cargo
+       - clang
        - clojure
+       - cppcheck
        - emacs
        - dash
        - fish
