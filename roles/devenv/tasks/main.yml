@@ -145,7 +145,7 @@
    - name: Checkout Dotfiles repo.
      become: true
      become_user: merlin
-     git: repo=https://github.com/TheWizardTower/dotfiles.git
+     git: repo=https://github.com/TheWizardTower/abrazo.git
           dest=/home/merlin/dotfiles
           accept_hostkey=yes
           update=no
