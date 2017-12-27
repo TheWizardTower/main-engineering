@@ -228,7 +228,7 @@
      args:
        chdir: /home/merlin/git/tig
 
-   - name: Setup dotfiles repo.
+   - name: Setup abrazo dotfiles repo.
      become: true
      become_user: merlin
      shell: "/home/merlin/dotfiles/install"
