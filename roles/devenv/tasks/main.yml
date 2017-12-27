@@ -45,6 +45,7 @@
      dnf: name={{ item }} state=present
      with_items:
        - ack
+       - boost-static
        - colordiff
        - cabal-rpm
        - cargo
@@ -54,10 +55,13 @@
        - fish
        - haskell-platform
        - hlint
+       - gcc-c++
        - git
+       - git-extras
        - git-svn
        - golang
        - htop
+       - hub
        - levien-inconsolata-fonts
        - iftop
        - iotop
