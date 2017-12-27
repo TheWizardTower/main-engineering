@@ -32,11 +32,11 @@
 
    - name: Create a plasma configuration directory.
      become: true
-     become_user: amccullough
-     shell: '/bin/mkdir -p /home/amccullough/.config/plasma-workspace/env'
+     become_user: merlin
+     shell: '/bin/mkdir -p /home/merlin/.config/plasma-workspace/env'
 
    - name: Create a file to set KDEs default window manager to xmonad.
-     copy: src=~/git/main-engineering/set_window_manager.sh dest=/home/amccullough/.config/plasma-workspace/env
+     copy: src=~/git/main-engineering/set_window_manager.sh dest=/home/merlin/.config/plasma-workspace/env
 
    - name: Enable the Haskell Stack COPR repo.
      shell: 'dnf copr enable petersen/stack -y'
@@ -109,7 +109,6 @@
        - dmenu
        - docker-io
        - dzen2
-       - fedup
        - firefox
        - flash-plugin
        - fortune-mod
@@ -122,7 +121,6 @@
        - imlib2-devel
        - kernel-devel
        - kernel-headers
-       - ksnapshot
        - paman
        - paprefs
        - pavucontrol
@@ -135,46 +133,43 @@
        - redshift
        - seamonkey
        - sl
-       - steam
        - sysstat
        - tigervnc
        - ufraw
        - unetbootin
-       - vlc
        - vnstat
        - xcompmgr
        - xmonad
-       - xulrunner
        - yakuake
   
    - name: Checkout Dotfiles repo.
      become: true
-     become_user: amccullough
+     become_user: merlin
      git: repo=https://github.com/TheWizardTower/dotfiles.git
-          dest=/home/amccullough/dotfiles
+          dest=/home/merlin/dotfiles
           accept_hostkey=yes
           update=no
 
    - name: Checkout a copy of Spacemacs.
      become: true
-     become_user: amccullough
+     become_user: merlin
      git: repo=https://github.com/syl20bnr/spacemacs.git
-          dest=/home/amccullough/spacemacs/.emacs.d
+          dest=/home/merlin/spacemacs/.emacs.d
           accept_hostkey=true
           update=yes
 
    - name: Create ~/git
      become: true
-     become_user: amccullough
-     file: path=/home/amccullough/git state=directory
+     become_user: merlin
+     file: path=/home/merlin/git state=directory
 
    # Need to make the ~/git dir
    - name: Checkout useful git repos.
      become: true
-     become_user: amccullough
+     become_user: merlin
      git: repo={{ item.src }}
           accept_hostkey=true
-          dest=/home/amccullough/git/{{ item.dest }}
+          dest=/home/merlin/git/{{ item.dest }}
           update=yes 
      with_items:
        - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
@@ -204,10 +199,10 @@
 
    - name: Setup dotfiles repo.
      become: true
-     become_user: amccullough
-     shell: "/home/amccullough/dotfiles/install.sh"
+     become_user: merlin
+     shell: "/home/merlin/dotfiles/install.sh"
      args:
-       chdir: /home/amccullough/dotfiles
+       chdir: /home/merlin/dotfiles
   
    - name: Update packages.
      dnf: name=* state=latest
