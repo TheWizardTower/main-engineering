@@ -150,7 +150,7 @@
      become: true
      become_user: merlin
      git: repo=https://github.com/TheWizardTower/abrazo.git
-          dest=/home/merlin/dotfiles
+          dest=/home/merlin/abrazo
           accept_hostkey=yes
           update=no
 
@@ -201,10 +201,37 @@
        - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
        - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
+   - name: Setup fonts.
+     become: true
+     become_user: merlin
+     shell: "/home/merlin/git/fonts/install.sh"
+
+   - name: Setup bass.
+     become: true
+     become_user: merlin
+     shell: "make install"
+     args:
+       chdir: /home/merlin/git/bass
+
+   - name: Setup GRC.
+     shell: "/home/merlin/git/grc/install.sh"
+     args:
+       chdir: /home/merlin/git/grc
+
+   - name: Install hr.
+     shell: "make install"
+     args:
+       chdir: /home/merlin/git/hr
+
+   - name: Build tig.
+     shell: "make; make install; make install-doc; make install-release-doc"
+     args:
+       chdir: /home/merlin/git/tig
+
    - name: Setup dotfiles repo.
      become: true
      become_user: merlin
-     shell: "/home/merlin/dotfiles/install.sh"
+     shell: "/home/merlin/dotfiles/install"
      args:
        chdir: /home/merlin/dotfiles
   
