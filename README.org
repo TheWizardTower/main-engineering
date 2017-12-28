@@ -1,0 +1,3 @@
+Ansible configuration script to set up my development environment.
+
+This assumes that the standard user is named "merlin", but you can just run a search-replace to change it to your username.
