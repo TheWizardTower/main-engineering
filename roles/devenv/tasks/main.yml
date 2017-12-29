@@ -109,6 +109,11 @@
        name: PHP_CodeSniffer
        state: latest
 
+   - name: Install pip packages (powerline).
+     pip:
+       name: powerline-status
+       state: latest
+
    - name: Install -devel packages for threadscope.
      dnf: name={{ item }}
           state=present
