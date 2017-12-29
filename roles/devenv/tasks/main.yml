@@ -76,6 +76,7 @@
        - perl-core
        - perl-criticism
        - perltidy
+       - php-pear
        - python
        - PyYAML
        - rpmlint
@@ -102,6 +103,11 @@
      jshint\
      standard\
      tern'
+
+   - name: Install Pear packages (phpcs).
+     pear:
+       name: PHP_CodeSniffer
+       state: latest
 
    - name: Install -devel packages for threadscope.
      dnf: name={{ item }}
