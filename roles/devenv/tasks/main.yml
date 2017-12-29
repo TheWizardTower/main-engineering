@@ -262,6 +262,8 @@
        chdir: /home/merlin/git/hr
 
    - name: Build tig.
+     become: true
+     become_user: merlin
      shell: "make; make install; make install-doc; make install-release-doc"
      args:
        chdir: /home/merlin/git/tig
