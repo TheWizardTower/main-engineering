@@ -60,6 +60,7 @@
        - haskell-platform
        - hlint
        - gcc-c++
+       - gem
        - git
        - git-extras
        - git-svn
@@ -105,6 +106,11 @@
      jshint\
      standard\
      tern'
+
+   - name: Install Gem package ().
+     gem:
+       name: sqlint
+       state: latest
 
    - name: Install Pear packages (phpcs).
      pear:
