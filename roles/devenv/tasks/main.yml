@@ -71,6 +71,7 @@
        - lynx
        - mercurial
        - mc
+       - npm
        - ntop
        - perl-core
        - perl-criticism
@@ -88,6 +89,19 @@
        - vim-enhanced
        - vim-X11
        - zsh
+
+   # Doing this the caveman way because the npm ansible module doesn't react
+   # well with the with_items: construct.
+   - name: Install npm packages.
+     shell: 'npm install --global\
+     acorn\
+     eslint\
+     eslint-config-standard\
+     eslint-plugin-react\
+     js-beautify\
+     jshint\
+     standard\
+     tern'
 
    - name: Install -devel packages for threadscope.
      dnf: name={{ item }}
