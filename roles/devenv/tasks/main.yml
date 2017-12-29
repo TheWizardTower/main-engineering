@@ -45,8 +45,10 @@
      dnf: name={{ item }} state=present
      with_items:
        - ack
+       - asciidoc
        - boost-static
        - colordiff
+       - colorgcc
        - cabal-rpm
        - cargo
        - clang
