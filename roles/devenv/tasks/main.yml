@@ -118,7 +118,7 @@
 
    - name: Install -devel packages for threadscope.
      dnf: name={{ item }}
-          state=present
+     state: present
      with_items:
        - cairo-devel
        - glib2-devel
@@ -127,7 +127,7 @@
 
    - name: Install packaged desktop tools.
      dnf: name={{ item }}
-          state=present
+     state: present
      with_items:
        - GraphicsMagick
        - ImageMagick
