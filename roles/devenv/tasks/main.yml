@@ -53,6 +53,7 @@
        - cargo
        - clang
        - clojure
+       - cowsay
        - cppcheck
        - emacs
        - dash
@@ -80,6 +81,7 @@
        - perl-criticism
        - perltidy
        - php-pear
+       - pv
        - python
        - PyYAML
        - rpmlint
@@ -140,7 +142,6 @@
        - NetworkManager-tui
        - VirtualBox-5.1 # Needs the virtualbox repo.
        - amarok-utils
-       - cowsay
        - darktable
        - digikam
        - dkms
@@ -167,7 +168,6 @@
        - pidgin-otr
        - plasma-applet-redshift-control
        - purple-plugin-pack
-       - pv
        - redshift
        - seamonkey
        - sl
