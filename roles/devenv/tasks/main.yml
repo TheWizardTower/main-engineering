@@ -181,6 +181,7 @@
        - vnstat
        - xcompmgr
        - xmonad
+       - xsel
        - yakuake
   
    - name: Checkout Dotfiles repo.
