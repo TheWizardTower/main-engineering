@@ -159,8 +159,10 @@
        - gpodder
        - imlib2
        - imlib2-devel
+       - kdenlive
        - kernel-devel
        - kernel-headers
+       - obs-studio
        - paman
        - paprefs
        - pavucontrol
