@@ -183,7 +183,7 @@
        - xmonad
        - xsel
        - yakuake
-  
+
    - name: Checkout Dotfiles repo.
      become: true
      become_user: merlin
