@@ -52,6 +52,7 @@
        - cabal-rpm
        - cargo
        - clang
+       - cmake
        - clojure
        - cowsay
        - cppcheck
