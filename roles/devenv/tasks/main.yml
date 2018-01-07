@@ -140,7 +140,6 @@
        - NetworkManager-tui
        - VirtualBox-5.1 # Needs the virtualbox repo.
        - amarok-utils
-       - cairo-dock
        - cowsay
        - darktable
        - digikam
