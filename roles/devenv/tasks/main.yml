@@ -89,6 +89,10 @@
        - PyYAML
        - rpmlint
        - rust
+       - rust-doc
+       - rust-lldb
+       - rust-src
+       - rust-std-static
        - screen
        - stack
        - strace
