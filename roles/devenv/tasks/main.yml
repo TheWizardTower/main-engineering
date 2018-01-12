@@ -168,6 +168,11 @@
        - kdenlive
        - kernel-devel
        - kernel-headers
+       - libXpm-devel
+       - libxml2-static
+       - libxml++-devel
+       - libxml++30devel
+       - libxml-devel
        - obs-studio
        - paman
        - paprefs
@@ -185,7 +190,9 @@
        - ufraw
        - unetbootin
        - vnstat
+       - wireless-tools-devel
        - xcompmgr
+       - Xdialog
        - xmonad
        - xsel
        - yakuake
