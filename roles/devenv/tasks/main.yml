@@ -247,6 +247,7 @@
        - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
        - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
        - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
+       - { src: 'git@github.com:ndmitchell/ghcid.git', dest: 'ghcid' }
        - { src: 'https://github.com/github/hub.git', dest: 'hub' }
        - { src: 'https://github.com/jonas/tig.git', dest: 'tig' }
        - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
