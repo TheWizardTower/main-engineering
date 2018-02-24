@@ -13,7 +13,7 @@
 
    # I've seen the non-free rpmfusion rpm not get installed. Would love to know why.
    - name: Enable RPMFusion
-     dnf: name=https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.sdtout }}.noarch.rpm       state=latest
+     dnf: name=https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.stdout }}.noarch.rpm       state=latest
      dnf: name=https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm state=latest
 
    - name: Install libselinux.
