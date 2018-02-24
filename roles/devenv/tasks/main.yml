@@ -171,7 +171,7 @@
        - libXpm-devel
        - libxml2-static
        - libxml++-devel
-       - libxml++30devel
+       - libxml++30-devel
        - libxml-devel
        - obs-studio
        - paman
