@@ -155,10 +155,12 @@
        - dmenu
        - docker-io
        - dzen2
+       - exfat-utils
        - firefox
        - flash-plugin
        - fortune-mod
        - free42
+       - fuse-exfat
        - gimp
        - google-chrome-stable # Needs the google chrome repo.
        - gparted
