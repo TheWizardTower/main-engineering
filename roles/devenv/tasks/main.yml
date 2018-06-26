@@ -251,6 +251,7 @@
        - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
        - { src: 'https://github.com/github/hub.git', dest: 'hub' }
        - { src: 'https://github.com/jonas/tig.git', dest: 'tig' }
+       - { src: 'https://github.com/joshuaclayton/unused.git', dest: 'unused' }
        - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
        - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
        - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
