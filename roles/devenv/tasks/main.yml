@@ -249,12 +249,12 @@
        - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
        - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
        - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
-       - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
        - { src: 'https://github.com/github/hub.git', dest: 'hub' }
        - { src: 'https://github.com/jonas/tig.git', dest: 'tig' }
        - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
        - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
        - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
+       - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
        - { src: 'https://github.com/powerline/fonts.git', dest: 'fonts' }
        - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
        - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
