@@ -166,14 +166,13 @@
        state: latest
 
    - name: Install -devel packages for threadscope.
-     dnf: name={{ item }}
-     state: present
-     with_items:
-       - cairo-devel
-       - glib2-devel
-       - gtk2-devel
-       - pango-devel
-
+     dnf:
+       name:
+         - cairo-devel
+         - glib2-devel
+         - gtk2-devel
+         - pango-devel
+       state: present
 
    - name: Checkout Dotfiles repo.
      become: true
