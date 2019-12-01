@@ -4,9 +4,6 @@
    - name: Ensure docker group is present.
      group: name=docker state=present
 
-   - name: Setup Adobe yum repo.
-     shell: '/usr/bin/rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm ||:'
-
    - name: Capture Fedora release number.
      # warn: false # the rpm/dnf module doesn't let us do this, so don't chide us to use it.
      shell: '/bin/rpm -E %fedora'
@@ -27,22 +24,10 @@
          - libselinux-python3
        state: latest
 
-   - name: Setup Google Chrome repo file.
-     copy: src=~/git/main-engineering/google-chrome.repo dest=/etc/yum.repos.d/google-chrome.repo owner=root group=root mode=0644
 
-   - name: Setup VirtualBox Repo.
-     copy: src=~/git/main-engineering/VirtualBox.repo dest=/etc/yum.repos.d/VirtualBox.repo owner=root group=root mode=0644
 
-   - name: Import Google Chrome public key.
-     shell: '/bin/rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub'
 
-   - name: Create a plasma configuration directory.
-     become: true
-     become_user: merlin
-     shell: '/bin/mkdir -p /home/merlin/.config/plasma-workspace/env'
 
-   - name: Create a file to set KDEs default window manager to xmonad.
-     copy: src=~/git/main-engineering/set_window_manager.sh dest=/home/merlin/.config/plasma-workspace/env
 
    - name: Enable the Haskell Stack COPR repo.
      shell: 'dnf copr enable petersen/stack -y'
@@ -145,64 +130,6 @@
        - gtk2-devel
        - pango-devel
 
-   - name: Install packaged desktop tools.
-     dnf: name={{ item }}
-     state: present
-     with_items:
-       - GraphicsMagick
-       - ImageMagick
-       - NetworkManager-tui
-       - VirtualBox-5.1 # Needs the virtualbox repo.
-       - amarok-utils
-       - darktable
-       - digikam
-       - dkms
-       - dmenu
-       - docker-io
-       - dzen2
-       - exfat-utils
-       - firefox
-       - flash-plugin
-       - fortune-mod
-       - free42
-       - fuse-exfat
-       - gimp
-       - google-chrome-stable # Needs the google chrome repo.
-       - gparted
-       - gpodder
-       - imlib2
-       - imlib2-devel
-       - kdenlive
-       - kernel-devel
-       - kernel-headers
-       - libXpm-devel
-       - libxml2-static
-       - libxml++-devel
-       - libxml++30-devel
-       - libxml-devel
-       - obs-studio
-       - paman
-       - paprefs
-       - pavucontrol
-       - pavumeter
-       - pidgin
-       - pidgin-otr
-       - plasma-applet-redshift-control
-       - purple-plugin-pack
-       - redshift
-       - seamonkey
-       - sl
-       - sysstat
-       - tigervnc
-       - ufraw
-       - unetbootin
-       - vnstat
-       - wireless-tools-devel
-       - xcompmgr
-       - Xdialog
-       - xmonad
-       - xsel
-       - yakuake
 
    - name: Checkout Dotfiles repo.
      become: true
@@ -261,19 +188,11 @@
        - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
        - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
        - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
-       - { src: 'https://github.com/powerline/fonts.git', dest: 'fonts' }
        - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
        - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
-       - { src: 'https://github.com/thestinger/termite.git', dest: 'termite' }
-       - { src: 'https://github.com/thestinger/vte-ng.git', dest: 'vte-ng' }
        - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
        - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
        - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
-
-   - name: Setup fonts.
-     become: true
-     become_user: merlin
-     shell: "/home/merlin/git/fonts/install.sh"
 
    - name: Setup bass.
      become: true
