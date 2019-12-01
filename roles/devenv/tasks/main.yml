@@ -234,6 +234,7 @@
        - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
        - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
        - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
+       - { src: 'https://github.com/trapd00r/LS_COLORS.git', dest: 'LS_COLORS' }
        - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
        - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
