@@ -29,72 +29,7 @@
      args:
        warn: false
 
-
-
-
-
-
    - name: Install packaged development tools.
-     dnf: name={{ item }} state=present
-     with_items:
-       - ack
-       - asciidoc
-       - boost-static
-       - colordiff
-       - colorgcc
-       - cabal-rpm
-       - cargo
-       - clang
-       - cmake
-       - clojure
-       - cowsay
-       - cppcheck
-       - emacs
-       - dash
-       - fish
-       - haskell-platform
-       - hlint
-       - gcc-c++
-       - gem
-       - git
-       - git-extras
-       - git-svn
-       - golang
-       - htop
-       - hub
-       - levien-inconsolata-fonts
-       - iftop
-       - iotop
-       - irssi
-       - lynx
-       - mercurial
-       - mc
-       - most
-       - npm
-       - ntop
-       - perl-core
-       - perl-criticism
-       - perltidy
-       - php-pear
-       - pv
-       - python
-       - PyYAML
-       - rpmlint
-       - rust
-       - rust-doc
-       - rust-lldb
-       - rust-src
-       - rust-std-static
-       - screen
-       - stack
-       - strace
-       - subversion
-       - the_silver_searcher
-       - tmux
-       - vim-enhanced
-       - vim-X11
-       - zsh
-
    # Doing this the caveman way because the npm ansible module doesn't react
    # well with the with_items: construct.
    - name: Install npm packages.
@@ -109,6 +44,68 @@
      tern'
 
    - name: Install Gem package ().
+     dnf:
+       name:
+         - ack
+         - asciidoc
+         - boost-static
+         - colordiff
+         - colorgcc
+         - cabal-rpm
+         - cargo
+         - clang
+         - cmake
+         - clojure
+         - cowsay
+         - cppcheck
+         - emacs
+         - dash
+         - fish
+         - haskell-platform
+         - hlint
+         - gcc-c++
+         - gem
+         - git
+         - git-extras
+         - git-svn
+         - golang
+         - htop
+         - hub
+         - iftop
+         - iotop
+         - irssi
+         - lynx
+         - mercurial
+         - mc
+         - most
+         - npm
+         # - ntop
+         - perl-core
+         - perl-criticism
+         - perltidy
+         - php-pear
+         - psmisc
+         - pv
+         - python
+         - python3-pip
+         - PyYAML
+         - rpmlint
+         - ruby-devel
+         - rust
+         - rust-doc
+         - rust-lldb
+         - rust-src
+         - rust-std-static
+         - screen
+         - stack
+         - strace
+         - subversion
+         - the_silver_searcher
+         - tmux
+         - vim-enhanced
+         - zsh
+       state: present
+
      gem:
        name: sqlint
        state: latest
