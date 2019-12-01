@@ -149,9 +149,11 @@
        global: false
        path: /home/merlin
 
+   - name: Install Gem package (sqlint).
      gem:
        name: sqlint
        state: latest
+       user_install: false
 
    - name: Install Pear packages (phpcs).
      pear:
