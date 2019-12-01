@@ -269,5 +269,7 @@
        chdir: /home/merlin/dotfiles
   
    - name: Update packages.
-     dnf: name=* state=latest
+     dnf:
+       name: *
+       state: latest
   
