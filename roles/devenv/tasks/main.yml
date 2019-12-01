@@ -1,5 +1,7 @@
 ---
  - hosts: localhost
+   vars:
+     simple_npm_packages: ['acorn', 'jshint', 'tern', 'youtube-dl' ]
    tasks:
    - name: Ensure docker group is present.
      group: name=docker state=present
@@ -93,69 +95,82 @@
          - zsh
        state: present
 
+   - name: Create ~/local/bin
+     file:
+       path: "/home/merlin/{{ item }}"
+       state: directory
+       owner: merlin
+       group: merlin
+     loop:
+       - "local"
+       - "local/bin"
 
-   - name: Install acorn via npm.
+   - name: Install "simple" npm packages.
      npm:
-       name: acorn
+       name: "{{ item }}"
        state: latest
        global: false
        path: /home/merlin
+     loop: "{{ simple_npm_packages }}"
 
-   - name: Install eslint via npm.
+   - name: Configure "simple" npm packages.
+     file:
+       path: "/home/merlin/local/bin/{{ item }}"
+       src: "/home/merlin/node_modules/{{ item }}/bin/{{ item }}"
+       state: link
+       owner: merlin
+       group: merlin
+     loop: "{{ simple_npm_packages }}"
+
+   - name: Install not-so-simple npm packages.
      npm:
-       name: eslint
+       name: "{{ item }}"
        state: latest
        global: false
        path: /home/merlin
+     loop:
+       - eslint
+       - eslint-config-standard
+       - eslint-plugin-react
+       - humanize-duration
+       - js-beautify
+       - standard
 
-   - name: Install eslint-config-standard via npm.
-     npm:
-       name: eslint-config-standard
-       state: latest
-       global: false
-       path: /home/merlin
+   - name: Setup eslint.
+     file:
+       path: "/home/merlin/local/bin/eslint"
+       src: "/home/merlin/node_modules/eslint/bin/eslint.js"
+       state: link
+       owner: merlin
+       group: merlin
 
-   - name: Install eslint-plugin-react via npm.
-     npm:
-       name: eslint-plugin-react
-       state: latest
-       global: false
-       path: /home/merlin
+   - name: Setup js-beautify.
+     file:
+       path: "/home/merlin/local/bin/{{ item }}"
+       src: "/home/merlin/node_modules/js-beautify/js/bin/{{ item }}.js"
+       state: link
+       owner: merlin
+       group: merlin
+     loop:
+       - 'css-beautify'
+       - 'html-beautify'
+       - 'js-beautify'
 
-   - name: Install humanize-duration via npm.
-     npm:
-       name: humanize-duration
-       state: latest
-       global: false
-       path: /home/merlin
+   - name: Setup humanize-duration.
+     file:
+       path: "/home/merlin/local/bin/humanize-duration"
+       src: "/home/merlin/node_modules/humanize-duration/humanize-duration.js"
+       state: link
+       owner: merlin
+       group: merlin
 
-   - name: Install js-beautify via npm.
-     npm:
-       name: js-beautify
-       state: latest
-       global: false
-       path: /home/merlin
-
-   - name: Install jshint via npm.
-     npm:
-       name: jshint
-       state: latest
-       global: false
-       path: /home/merlin
-
-   - name: Install standard via npm.
-     npm:
-       name: standard
-       state: latest
-       global: false
-       path: /home/merlin
-
-   - name: Install tern via npm.
-     npm:
-       name: tern
-       state: latest
-       global: false
-       path: /home/merlin
+   - name: Setup standard.
+     file:
+       path: "/home/merlin/local/bin/standard"
+       src: "/home/merlin/node_modules/standard/bin/cmd.js"
+       state: link
+       owner: merlin
+       group: merlin
 
    - name: Install Gem package (sqlint).
      gem:
