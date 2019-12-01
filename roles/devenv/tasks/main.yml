@@ -24,13 +24,15 @@
          - libselinux-python3
        state: latest
 
-
-
-
-
-
    - name: Enable the Haskell Stack COPR repo.
      shell: 'dnf copr enable petersen/stack -y'
+     args:
+       warn: false
+
+
+
+
+
 
    - name: Install packaged development tools.
      dnf: name={{ item }} state=present
