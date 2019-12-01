@@ -88,6 +88,7 @@
          - subversion
          - the_silver_searcher
          - tmux
+         - tree
          - vim-enhanced
          - zsh
        state: present
