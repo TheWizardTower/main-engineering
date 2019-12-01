@@ -245,6 +245,14 @@
      args:
        chdir: /home/merlin/git/bass
 
+   - name: Setup LS_COLORS.
+     file:
+       path: /home/merlin/.dircolors
+       src: /home/merlin/git/LS_COLORS/LS_COLORS
+       state: soft
+       owner: merlin
+       group: merlin
+
    - name: Setup GRC.
      shell: "/home/merlin/git/grc/install.sh"
      args:
