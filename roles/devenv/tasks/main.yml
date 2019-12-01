@@ -184,10 +184,11 @@
        name: PHP_CodeSniffer
        state: latest
 
-   - name: Install pip packages (powerline).
+   - name: Install pip3 packages (powerline).
      pip:
        name: powerline-status
        state: latest
+       executable: pip3
 
    - name: Install -devel packages for threadscope.
      dnf:
