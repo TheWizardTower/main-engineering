@@ -8,7 +8,10 @@
      shell: '/usr/bin/rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm ||:'
 
    - name: Capture Fedora release number.
+     # warn: false # the rpm/dnf module doesn't let us do this, so don't chide us to use it.
      shell: '/bin/rpm -E %fedora'
+     args:
+       warn: false
      register: rpm_release
 
    # I've seen the non-free rpmfusion rpm not get installed. Would love to know why.
