@@ -122,6 +122,13 @@
        global: false
        path: /home/merlin
 
+   - name: Install humanize-duration via npm.
+     npm:
+       name: humanize-duration
+       state: latest
+       global: false
+       path: /home/merlin
+
    - name: Install js-beautify via npm.
      npm:
        name: js-beautify
