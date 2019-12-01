@@ -271,6 +271,6 @@
   
    - name: Update packages.
      dnf:
-       name: *
-       state: latest
+       name=*
+       state=latest
   
