@@ -30,20 +30,6 @@
        warn: false
 
    - name: Install packaged development tools.
-   # Doing this the caveman way because the npm ansible module doesn't react
-   # well with the with_items: construct.
-   - name: Install npm packages.
-     shell: 'npm install --global\
-     acorn\
-     eslint\
-     eslint-config-standard\
-     eslint-plugin-react\
-     js-beautify\
-     jshint\
-     standard\
-     tern'
-
-   - name: Install Gem package ().
      dnf:
        name:
          - ack
@@ -105,6 +91,63 @@
          - vim-enhanced
          - zsh
        state: present
+
+
+   - name: Install acorn via npm.
+     npm:
+       name: acorn
+       state: latest
+       global: false
+       path: /home/merlin
+
+   - name: Install eslint via npm.
+     npm:
+       name: eslint
+       state: latest
+       global: false
+       path: /home/merlin
+
+   - name: Install eslint-config-standard via npm.
+     npm:
+       name: eslint-config-standard
+       state: latest
+       global: false
+       path: /home/merlin
+
+   - name: Install eslint-plugin-react via npm.
+     npm:
+       name: eslint-plugin-react
+       state: latest
+       global: false
+       path: /home/merlin
+
+   - name: Install js-beautify via npm.
+     npm:
+       name: js-beautify
+       state: latest
+       global: false
+       path: /home/merlin
+
+   - name: Install jshint via npm.
+     npm:
+       name: jshint
+       state: latest
+       global: false
+       path: /home/merlin
+
+   - name: Install standard via npm.
+     npm:
+       name: standard
+       state: latest
+       global: false
+       path: /home/merlin
+
+   - name: Install tern via npm.
+     npm:
+       name: tern
+       state: latest
+       global: false
+       path: /home/merlin
 
      gem:
        name: sqlint
