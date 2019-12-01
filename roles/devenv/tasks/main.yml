@@ -249,7 +249,7 @@
      file:
        path: /home/merlin/.dircolors
        src: /home/merlin/git/LS_COLORS/LS_COLORS
-       state: soft
+       state: link
        owner: merlin
        group: merlin
 
