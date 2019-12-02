@@ -240,17 +240,20 @@
    - name: Checkout useful git repos.
      become: true
      become_user: merlin
-     git: repo={{ item.src }}
-          accept_hostkey=true
-          dest=/home/merlin/git/{{ item.dest }}
-          update=yes 
-     with_items:
+     register: gitclone
+     git:
+       repo: "{{ item.src }}"
+       accept_hostkey: true
+       dest: "/home/merlin/git/{{ item.dest }}"
+       update: yes
+     loop:
        - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
        - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
        - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
        - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
        - { src: 'https://github.com/agda/agda.git', dest: 'agda' }
        - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
+       - { src: 'https://github.com/bobthecow/git-flow-completion.git', dest: 'git-flow-completion', }
        - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
        - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
        - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
@@ -270,12 +273,23 @@
        - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
        - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
+
+   - debug:
+       var: gitclone
+
    - name: Setup bass.
      become: true
      become_user: merlin
      shell: "make install"
      args:
        chdir: /home/merlin/git/bass
+
+   - name: Setup fzf.
+     become: true
+     become_user: merlin
+     shell: "/home/merlin/git/fzf/install"
+     args:
+       chdir: /home/merlin/git/fzf
 
    - name: Setup LS_COLORS.
      file:
