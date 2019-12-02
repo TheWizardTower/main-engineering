@@ -241,7 +241,9 @@
    - name: Create ~/git
      become: true
      become_user: merlin
-     file: path=/home/merlin/git state=directory
+     file:
+       path: "/home/merlin/git"
+       state: directory
 
    # Need to make the ~/git dir
    - name: Checkout useful git repos.
