@@ -464,6 +464,32 @@
    #   shell:
    #     cmd: "cargo install-update +nightly racer"
 
+   - name: Install stack (haskell) user tools.
+     become: true
+     become_user: merlin
+     args:
+      chdir: /home/merlin
+     shell:
+       cmd: "stack install {{ item }}"
+     loop:
+       - cpphs
+       - dhall
+       - ghcid
+       - happy
+       - hasktags
+       - hlint
+       - hoogle
+       - intero
+       - present
+       - ShellCheck
+       - stylish-haskell
+       - turtle
+       - weeder
+       # - ghc-mod # not building?
+       # - idris
+       # - pandoc
+       # - threadscope
+
    - name: Setup abrazo dotfiles repo.
      become: true
      become_user: merlin
