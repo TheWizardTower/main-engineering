@@ -77,6 +77,7 @@
           - iftop
           - iotop
           - irssi
+          - jq
           - lynx
           - mc
           - mercurial
@@ -206,12 +207,13 @@
           - tmux-powerline
         state: absent
 
-    - name: Install pip3 packages (ansible-lint, powerline, yamllint).
+    - name: Install pip3 packages.
       pip:
         name:
           - ansible-lint
           - powerline-status
           - yamllint
+          - yq
         state: latest
         executable: pip3
 
