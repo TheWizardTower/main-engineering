@@ -1,496 +1,514 @@
 ---
- - hosts: localhost
-   vars:
-     simple_npm_packages: ['acorn', 'jshint', 'tern', 'youtube-dl' ]
-   tasks:
-   - name: Ensure docker group is present.
-     group: name=docker state=present
+- hosts: localhost
+  vars:
+    simple_npm_packages: ['acorn', 'jshint', 'tern', 'youtube-dl']
+  tasks:
+    - name: Ensure docker group is present.
+      group: name=docker state=present
 
-   - name: Capture Fedora release number.
-     # warn: false # the rpm/dnf module doesn't let us do this, so don't chide us to use it.
-     shell: '/bin/rpm -E %fedora'
-     args:
-       warn: false
-     register: rpm_release
-     changed_when: false
+    - name: Capture Fedora release number.
+      # warn: false # the rpm/dnf module doesn't let us do this, so don't chide
+      # us to use it.
+      shell: '/bin/rpm -E %fedora'
+      args:
+        warn: false
+      register: rpm_release
+      changed_when: false
 
-   - name: Enable RPMFusion Free and Non-Free.
-     dnf:
-       name:
-         - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.stdout }}.noarch.rpm"
-         - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm"
-       state: latest
+    - name: Enable RPMFusion Free and Non-Free.
+      dnf:
+        state: latest
+        name:
+          - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.stdout }}.noarch.rpm"
+          - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm"
 
-   - name: Install libselinux.
-     dnf:
-       name:
-         - libselinux-python
-         - libselinux-python3
-       state: latest
+    - name: Install libselinux.
+      dnf:
+        state: latest
+        name:
+          - libselinux-python
+          - libselinux-python3
 
-   - name: Enable the Haskell Stack COPR repo.
-     shell: 'dnf copr enable petersen/stack -y'
-     args:
-       warn: false
-
-   - name: Install packaged development tools.
-     dnf:
-       state: latest
-       name:
-         - ack
-         - asciidoc
-         - boost-static
-         - colordiff
-         - colorgcc
-         - cabal-rpm
-         - cargo
-         - clang
-         - cmake
-         - clojure
-         - cowsay
-         - cppcheck
-         - emacs
-         - dash
-         - fish
-         - haskell-platform
-         - hlint
-         - gcc-c++
-         - gem
-         - git
-         - git-extras
-         - git-svn
-         - golang
-         - htop
-         - hub
-         - iftop
-         - iotop
-         - irssi
-         - lynx
-         - mercurial
-         - mc
-         - most
-         - npm
-         # - ntop
-         - perl-core
-         - perl-criticism
-         - perltidy
-         - php-pear
-         - psmisc
-         - pv
-         - python
-         - python3-pip
-         - PyYAML
-         - rpmlint
-         - ruby-devel
-         - rust
-         - rust-doc
-         - rust-lldb
-         - rust-src
-         - rust-std-static
-         - screen
-         - stack
-         - strace
-         - subversion
-         - the_silver_searcher
-         - tmux
-         - tree
-         - vim-enhanced
-         - zsh
-
-   - name: Create ~/local/bin
-     file:
-       path: "/home/merlin/{{ item }}"
-       state: directory
-       owner: merlin
-       group: merlin
-     loop:
-       - "local"
-       - "local/bin"
-
-   - name: Install "simple" npm packages.
-     npm:
-       name: "{{ item }}"
-       state: latest
-       global: false
-       path: /home/merlin
-     loop: "{{ simple_npm_packages }}"
-
-   - name: Configure "simple" npm packages.
-     file:
-       path: "/home/merlin/local/bin/{{ item }}"
-       src: "/home/merlin/node_modules/{{ item }}/bin/{{ item }}"
-       state: link
-       owner: merlin
-       group: merlin
-     loop: "{{ simple_npm_packages }}"
-
-   - name: Install not-so-simple npm packages.
-     npm:
-       name: "{{ item }}"
-       state: latest
-       global: false
-       path: /home/merlin
-     loop:
-       - eslint
-       - eslint-config-standard
-       - eslint-plugin-react
-       - js-beautify
-       - js-yaml
-       - standard
-
-   - name: Setup eslint and js-yaml.
-     file:
-       path: "/home/merlin/local/bin/{{ item }}"
-       src: "/home/merlin/node_modules/{{ item }}/bin/{{ item }}.js"
-       state: link
-       owner: merlin
-       group: merlin
-     loop:
-       - eslint
-       - js-yaml
-
-   - name: Setup js-beautify.
-     file:
-       path: "/home/merlin/local/bin/{{ item }}"
-       src: "/home/merlin/node_modules/js-beautify/js/bin/{{ item }}.js"
-       state: link
-       owner: merlin
-       group: merlin
-     loop:
-       - 'css-beautify'
-       - 'html-beautify'
-       - 'js-beautify'
-
-   - name: Setup standard.
-     file:
-       path: "/home/merlin/local/bin/standard"
-       src: "/home/merlin/node_modules/standard/bin/cmd.js"
-       state: link
-       owner: merlin
-       group: merlin
-
-   - name: Install Gem package (sqlint).
-     gem:
-       name: sqlint
-       state: latest
-       user_install: false
-
-   - name: Install Pear packages (phpcs).
-     pear:
-       name: PHP_CodeSniffer
-       state: latest
-
-   - name: Ensure packaged powerline is _not_ present.
-     dnf:
-       name:
-         - powerline
-         - tmux-powerline
-       state: absent
-
-   - name: Install pip3 packages (ansible-lint, powerline, yamllint).
-     pip:
-       name:
-         - ansible-lint
-         - powerline-status
-         - yamllint
-       state: latest
-       executable: pip3
-
-   - name: Install -devel packages for threadscope.
-     dnf:
-       name:
-         - cairo-devel
-         - glib2-devel
-         - gtk2-devel
-         - pango-devel
-       state: present
-
-   - name: Checkout Dotfiles repo.
-     become: true
-     become_user: merlin
-     git: repo=https://github.com/TheWizardTower/abrazo.git
-          dest=/home/merlin/abrazo
-          accept_hostkey=yes
-          update=no
-
-   - name: Checkout a copy of Spacemacs.
-     become: true
-     become_user: merlin
-     git: repo=https://github.com/syl20bnr/spacemacs.git
-          dest=/home/merlin/spacemacs/.emacs.d
-          accept_hostkey=true
-          update=yes
-
-   - name: Checkout a copy of Tmux Plugin Manager
-     become: true
-     become_user: merlin
-     git:
-       repo: https://github.com/tmux-plugins/tpm
-       dest: /home/merlin/.tmux/plugins/tpm
-       accept_hostkey: true
-       update: yes
-
-   - name: Create ~/git
-     become: true
-     become_user: merlin
-     file:
-       path: "/home/merlin/git"
-       state: directory
-
-   # Need to make the ~/git dir
-   - name: Checkout useful git repos.
-     become: true
-     become_user: merlin
-     register: gitclone
-     git:
-       repo: "{{ item.src }}"
-       accept_hostkey: true
-       dest: "/home/merlin/git/{{ item.dest }}"
-       update: yes
-     loop:
-       - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
-       - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
-       - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
-       - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
-       - { src: 'https://github.com/agda/agda.git', dest: 'agda' }
-       - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
-       - { src: 'https://github.com/bobthecow/git-flow-completion.git', dest: 'git-flow-completion', }
-       - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
-       - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
-       - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
-       - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
-       - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
-       - { src: 'https://github.com/github/hub.git', dest: 'hub' }
-       - { src: 'https://github.com/jonas/tig.git', dest: 'tig' }
-       - { src: 'https://github.com/joshuaclayton/unused.git', dest: 'unused' }
-       - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
-       - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
-       - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
-       - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
-       - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
-       - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
-       - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
-       - { src: 'https://github.com/trapd00r/LS_COLORS.git', dest: 'LS_COLORS' }
-       - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
-       - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
+    - name: Check for COPR configuration file.
+      changed_when: false
+      stat:
+        path: "/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:petersen:stack.repo"
+      register: stack_copr
 
 
-   - debug:
-       var: gitclone
+    - name: Enable the Haskell Stack COPR repo.
+      when: stack_copr.stat.exists is not defined
+      shell:
+        cmd: 'dnf copr enable petersen/stack -y'
+      args:
+        warn: false
 
-   - name: Setup bass.
-     become: true
-     become_user: merlin
-     shell: "make install"
-     args:
-       chdir: /home/merlin/git/bass
+    - name: Install packaged development tools.
+      dnf:
+        state: latest
+        name:
+          - ack
+          - asciidoc
+          - boost-static
+          - colordiff
+          - colorgcc
+          - cabal-rpm
+          - cargo
+          - clang
+          - cmake
+          - clojure
+          - cowsay
+          - cppcheck
+          - emacs
+          - dash
+          - fish
+          - haskell-platform
+          - hlint
+          - gcc-c++
+          - gem
+          - git
+          - git-extras
+          - git-svn
+          - golang
+          - htop
+          - hub
+          - iftop
+          - iotop
+          - irssi
+          - lynx
+          - mercurial
+          - mc
+          - most
+          - npm
+          # - ntop
+          - perl-core
+          - perl-criticism
+          - perltidy
+          - php-pear
+          - psmisc
+          - pv
+          - python
+          - python3-pip
+          - PyYAML
+          - rpmlint
+          - ruby-devel
+          - rust
+          - rust-doc
+          - rust-lldb
+          - rust-src
+          - rust-std-static
+          - screen
+          - stack
+          - strace
+          - subversion
+          - the_silver_searcher
+          - tmux
+          - tree
+          - vim-enhanced
+          - zsh
 
-   - name: Setup fzf.
-     become: true
-     become_user: merlin
-     shell: "/home/merlin/git/fzf/install"
-     args:
-       chdir: /home/merlin/git/fzf
+    - name: Create ~/local/bin
+      file:
+        path: "/home/merlin/{{ item }}"
+        state: directory
+        owner: merlin
+        group: merlin
+      loop:
+        - "local"
+        - "local/bin"
 
-   - name: Setup LS_COLORS.
-     file:
-       path: /home/merlin/.dircolors
-       src: /home/merlin/git/LS_COLORS/LS_COLORS
-       state: link
-       owner: merlin
-       group: merlin
+    - name: Install "simple" npm packages.
+      loop: "{{ simple_npm_packages }}"
+      npm:
+        name: "{{ item }}"
+        state: latest
+        global: false
+        path: /home/merlin
 
-   - name: Setup GRC.
-     shell: "/home/merlin/git/grc/install.sh"
-     args:
-       chdir: /home/merlin/git/grc
+    - name: Configure "simple" npm packages.
+      loop: "{{ simple_npm_packages }}"
+      file:
+        path: "/home/merlin/local/bin/{{ item }}"
+        src: "/home/merlin/node_modules/{{ item }}/bin/{{ item }}"
+        state: link
+        owner: merlin
+        group: merlin
 
-   - name: Install hr.
-     shell: "make install"
-     args:
-       chdir: /home/merlin/git/hr
+    - name: Install not-so-simple npm packages.
+      npm:
+        name: "{{ item }}"
+        state: latest
+        global: false
+        path: /home/merlin
+      loop:
+        - align-yaml
+        - eslint
+        - eslint-config-standard
+        - eslint-plugin-react
+        - js-beautify
+        - js-yaml
+        - standard
 
-   - name: Build tig.
-     become: true
-     become_user: merlin
-     shell: "make; make install; make install-doc; make install-release-doc"
-     args:
-       chdir: /home/merlin/git/tig
+    - name: Setup eslint and js-yaml.
+      file:
+        path: "/home/merlin/local/bin/{{ item }}"
+        src: "/home/merlin/node_modules/{{ item }}/bin/{{ item }}.js"
+        state: link
+        owner: merlin
+        group: merlin
+      loop:
+        - eslint
+        - js-yaml
 
-   - name: Update golang godoc tool.
-     shell:
-       cmd="go get -u golang.org/x/tools/cmd/godoc"
+    - name: Setup js-beautify.
+      file:
+        path: "/home/merlin/local/bin/{{ item }}"
+        src: "/home/merlin/node_modules/js-beautify/js/bin/{{ item }}.js"
+        state: link
+        owner: merlin
+        group: merlin
+      loop:
+        - 'css-beautify'
+        - 'html-beautify'
+        - 'js-beautify'
 
-   - name: Install golang user tools.
-     become: true
-     become_user: merlin
-     args:
-      chdir: /home/merlin
-     shell:
-       cmd: "go get -u {{ item }}"
-     loop:
-       - golang.org/x/tools/cmd/cover
-       - github.com/kbrgl/fu
-       - golang.org/x/tools/cmd/gorename
-       - golang.org/x/tools/cmd/guru
-       - github.com/motemen/gore
-       - github.com/nsf/gocode
-       - github.com/peco/peco/cmd/peco
-       - github.com/rogpeppe/godef
-       - github.com/tokozedg/sman
+    - name: Setup align-yaml.
+      file:
+        path: "/home/merlin/local/bin/align"
+        src: "/home/merlin/node_modules/align-yaml/bin/align"
+        state: link
+        owner: merlin
+        group: merlin
 
-   - name: Get golangcli-lint install script.
-     get_url:
-       url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh "
-       mode: u=rwx
-       owner: merlin
-       dest: "/home/merlin/tmp/golangcli-lint.sh"
-       force: yes
+    - name: Setup standard.
+      file:
+        path: "/home/merlin/local/bin/standard"
+        src: "/home/merlin/node_modules/standard/bin/cmd.js"
+        state: link
+        owner: merlin
+        group: merlin
 
-   - name: Install golangci-lint.
-     become: true
-     become_user: merlin
-     register: rustup
-     args:
-      chdir: /home/merlin
-     shell:
-       cmd: "sh ~/tmp/golangcli-lint.sh -b $(go env GOPATH)/bin"
+    - name: Install Gem package (sqlint).
+      gem:
+        name: sqlint
+        state: latest
+        user_install: false
 
-   - name: Install library packages for rust support commands.
-     dnf:
-       state: latest
-       name:
-         - libgit2-devel
-         - libssh2-devel
-         - openssl-devel
-         - openssl-libs
-         - pkgconf-pkg-config
+    - name: Install Pear packages (phpcs).
+      pear:
+        name: PHP_CodeSniffer
+        state: latest
 
-   - name: Updating rustup.
-     become: true
-     become_user: merlin
-     ignore_errors: true
-     register: rustup
-     args:
-      chdir: /home/merlin
-     shell:
-       cmd: "/home/merlin/.cargo/bin/rustup update"
+    - name: Ensure packaged powerline is _not_ present.
+      dnf:
+        name:
+          - powerline
+          - tmux-powerline
+        state: absent
 
-   - name: Create tmp dir.
-     file:
-       path: "/home/merlin/tmp"
-       state: directory
-       owner: merlin
-       group: merlin
+    - name: Install pip3 packages (ansible-lint, powerline, yamllint).
+      pip:
+        name:
+          - ansible-lint
+          - powerline-status
+          - yamllint
+        state: latest
+        executable: pip3
 
-   - name: Get rustup install script.
-     when: '"not found" in rustup.stderr'
-     get_url:
-       url: "https://sh.rustup.rs"
-       mode: u=rwx
-       owner: merlin
-       dest: "/home/merlin/tmp/rustup.sh"
-       force: yes
+    - name: Install -devel packages for threadscope.
+      dnf:
+        name:
+          - cairo-devel
+          - glib2-devel
+          - gtk2-devel
+          - pango-devel
+        state: present
 
-   - name: Install rustup.
-     become: true
-     become_user: merlin
-     when: '"not found" in rustup.stderr'
-     args:
-      chdir: /home/merlin
-     shell:
-       cmd: "sh ~/tmp/rustup.sh -y"
+    - name: Checkout Dotfiles repo.
+      become: true
+      become_user: merlin
+      git: repo=https://github.com/TheWizardTower/abrazo.git
+           dest=/home/merlin/abrazo
+           accept_hostkey=yes
+           update=no
 
-   - name: Updating Cargo Update
-     become: true
-     become_user: merlin
-     ignore_errors: true
-     register: cargo_update
-     args:
-      chdir: /home/merlin
-     shell:
-       cmd: "cargo install-update cargo-update"
+    - name: Checkout a copy of Spacemacs.
+      become: true
+      become_user: merlin
+      git: repo=https://github.com/syl20bnr/spacemacs.git
+           dest=/home/merlin/spacemacs/.emacs.d
+           accept_hostkey=true
+           update=yes
 
-   - name: Install Cargo Update.
-     become: true
-     become_user: merlin
-     when: '"no such subcommand" in cargo_update'
-     args:
-      chdir: /home/merlin
-     shell:
-       cmd: "cargo install --force cargo-update"
+    - name: Checkout a copy of Tmux Plugin Manager
+      become: true
+      become_user: merlin
+      git:
+        repo: https://github.com/tmux-plugins/tpm
+        dest: /home/merlin/.tmux/plugins/tpm
+        accept_hostkey: true
+        update: true
 
-   - name: Install cargo (rust) user tools.
-     become: true
-     become_user: merlin
-     args:
-      chdir: /home/merlin
-     shell:
-       cmd: "cargo install-update {{ item }}"
-     loop:
-       - cargo-check
-       - cargo-edit
-       - cargo-graph
-       - cargo-script
-       - cargo-watch
-       - kickstart
-       - ptags
-       - ripgrep
-       - xsv
-       - -a # update all packages.
+    - name: Create ~/git
+      become: true
+      become_user: merlin
+      file:
+        path: "/home/merlin/git"
+        state: directory
 
-   # Broken at present, because clippy doesn't have a nightly build for linux.
-   # - name: Setup nightly build rustc toolchain.
-   #   become: true
-   #   become_user: merlin
-   #   args:
-   #    chdir: /home/merlin
-   #   shell:
-   #     cmd: "/home/merlin/.cargo/bin/rustup toolchain add nightly"
+    # Need to make the ~/git dir
+    - name: Checkout useful git repos.
+      become: true
+      become_user: merlin
+      register: gitclone
+      git:
+        repo: "{{ item.src }}"
+        accept_hostkey: true
+        dest: "/home/merlin/git/{{ item.dest }}"
+        update: true
+      loop:
+        - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
+        - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
+        - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
+        - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
+        - { src: 'https://github.com/agda/agda.git', dest: 'agda' }
+        - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
+        - { src: 'https://github.com/bobthecow/git-flow-completion.git', dest: 'git-flow-completion', }
+        - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
+        - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
+        - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
+        - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
+        - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
+        - { src: 'https://github.com/github/hub.git', dest: 'hub' }
+        - { src: 'https://github.com/jonas/tig.git', dest: 'tig' }
+        - { src: 'https://github.com/joshuaclayton/unused.git', dest: 'unused' }
+        - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
+        - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
+        - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
+        - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
+        - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
+        - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
+        - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
+        - { src: 'https://github.com/trapd00r/LS_COLORS.git', dest: 'LS_COLORS' }
+        - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
+        - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
-   # - name: Install racer (rust tool that needs nightly)
-   #   become: true
-   #   become_user: merlin
-   #   args:
-   #     chdir: /home/merlin
-   #   shell:
-   #     cmd: "cargo install-update +nightly racer"
+    - debug:
+        var: gitclone
 
-   - name: Install stack (haskell) user tools.
-     become: true
-     become_user: merlin
-     args:
-      chdir: /home/merlin
-     shell:
-       cmd: "stack install {{ item }}"
-     loop:
-       - cpphs
-       - dhall
-       - ghcid
-       - happy
-       - hasktags
-       - hlint
-       - hoogle
-       - intero
-       - present
-       - ShellCheck
-       - stylish-haskell
-       - turtle
-       - weeder
-       # - ghc-mod # not building?
-       # - idris
-       # - pandoc
-       # - threadscope
+    - name: Setup bass.
+      become: true
+      become_user: merlin
+      # when: "gitclone.stdout"
+      shell: "make install"
+      args:
+        chdir: /home/merlin/git/bass
 
-   - name: Setup abrazo dotfiles repo.
-     become: true
-     become_user: merlin
-     shell: "/home/merlin/dotfiles/install"
-     args:
-       chdir: /home/merlin/dotfiles
-  
-   - name: Update packages.
-     dnf:
-       name=*
-       state=latest
-  
+    - name: Setup fzf.
+      become: true
+      become_user: merlin
+      shell: "/home/merlin/git/fzf/install"
+      args:
+        chdir: /home/merlin/git/fzf
+
+    - name: Setup LS_COLORS.
+      file:
+        path: /home/merlin/.dircolors
+        src: /home/merlin/git/LS_COLORS/LS_COLORS
+        state: link
+        owner: merlin
+        group: merlin
+
+    - name: Setup GRC.
+      shell: "/home/merlin/git/grc/install.sh"
+      args:
+        chdir: /home/merlin/git/grc
+
+    - name: Install hr.
+      shell: "make install"
+      args:
+        chdir: /home/merlin/git/hr
+
+    - name: Build tig.
+      become: true
+      become_user: merlin
+      shell: "make; make install; make install-doc; make install-release-doc"
+      args:
+        chdir: /home/merlin/git/tig
+
+    - name: Update golang godoc tool.
+      shell:
+        cmd="go get -u golang.org/x/tools/cmd/godoc"
+
+    - name: Install golang user tools.
+      become: true
+      become_user: merlin
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: "go get -u {{ item }}"
+      loop:
+        - golang.org/x/tools/cmd/cover
+        - github.com/kbrgl/fu
+        - golang.org/x/tools/cmd/gorename
+        - golang.org/x/tools/cmd/guru
+        - github.com/motemen/gore
+        - github.com/nsf/gocode
+        - github.com/peco/peco/cmd/peco
+        - github.com/rogpeppe/godef
+        - github.com/tokozedg/sman
+
+    - name: Get golangcli-lint install script.
+      get_url:
+        url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh "
+        mode: u=rwx
+        owner: merlin
+        dest: "/home/merlin/tmp/golangcli-lint.sh"
+        force: true
+
+    - name: Install golangci-lint.
+      become: true
+      become_user: merlin
+      register: rustup
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: "sh ~/tmp/golangcli-lint.sh -b $(go env GOPATH)/bin"
+
+    - name: Install library packages for rust support commands.
+      dnf:
+        state: latest
+        name:
+          - libgit2-devel
+          - libssh2-devel
+          - openssl-devel
+          - openssl-libs
+          - pkgconf-pkg-config
+
+    - name: Updating rustup.
+      become: true
+      become_user: merlin
+      ignore_errors: true
+      register: rustup
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: "/home/merlin/.cargo/bin/rustup update"
+
+    - name: Create tmp dir.
+      file:
+        path: "/home/merlin/tmp"
+        state: directory
+        owner: merlin
+        group: merlin
+
+    - name: Get rustup install script.
+      when: '"not found" in rustup.stderr'
+      get_url:
+        url: "https://sh.rustup.rs"
+        mode: u=rwx
+        owner: merlin
+        dest: "/home/merlin/tmp/rustup.sh"
+        force: true
+
+    - name: Install rustup.
+      become: true
+      become_user: merlin
+      when: '"not found" in rustup.stderr'
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: "sh ~/tmp/rustup.sh -y"
+
+    - name: Updating Cargo Update
+      become: true
+      become_user: merlin
+      ignore_errors: true
+      register: cargo_update
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: "cargo install-update cargo-update"
+
+    - name: Install Cargo Update.
+      become: true
+      become_user: merlin
+      when: '"no such subcommand" in cargo_update'
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: "cargo install --force cargo-update"
+
+    - name: Install cargo (rust) user tools.
+      become: true
+      become_user: merlin
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: "cargo install-update {{ item }}"
+      loop:
+        - cargo-check
+        - cargo-edit
+        - cargo-graph
+        - cargo-script
+        - cargo-watch
+        - kickstart
+        - ptags
+        - ripgrep
+        - xsv
+        - -a   # update all packages.
+
+    # Broken at present, because clippy doesn't have a nightly build for linux.
+    # - name: Setup nightly build rustc toolchain.
+    #   become: true
+    #   become_user: merlin
+    #   args:
+    #    chdir: /home/merlin
+    #   shell:
+    #     cmd: "/home/merlin/.cargo/bin/rustup toolchain add nightly"
+
+    # - name: Install racer (rust tool that needs nightly)
+    #   become: true
+    #   become_user: merlin
+    #   args:
+    #     chdir: /home/merlin
+    #   shell:
+    #     cmd: "cargo install-update +nightly racer"
+
+    - name: Install stack (haskell) user tools.
+      become: true
+      become_user: merlin
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: "stack install {{ item }}"
+      loop:
+        - cpphs
+        - dhall
+        - ghcid
+        - happy
+        - hasktags
+        - hlint
+        - hoogle
+        - intero
+        - present
+        - ShellCheck
+        - stylish-haskell
+        - turtle
+        - weeder
+        # - ghc-mod # not building?
+        # - idris
+        # - pandoc
+        # - threadscope
+
+    - name: Setup abrazo dotfiles repo.
+      become: true
+      become_user: merlin
+      shell: "/home/merlin/dotfiles/install"
+      args:
+        chdir: /home/merlin/dotfiles
+
+    - name: Update packages.
+      dnf:
+        name=*
+        state=latest
