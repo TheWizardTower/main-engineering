@@ -316,6 +316,37 @@
      args:
        chdir: /home/merlin/git/tig
 
+   - name: Update golang godoc tool.
+     shell:
+       cmd="go get -u golang.org/x/tools/cmd/godoc"
+
+   - name: Install golang user tools.
+     become: true
+     become_user: merlin
+     args:
+      chdir: /home/merlin
+     shell:
+       cmd: "go get -u {{ item }}"
+     loop:
+       - golang.org/x/tools/cmd/cover
+       - github.com/kbrgl/fu
+       - golang.org/x/tools/cmd/gorename
+       - golang.org/x/tools/cmd/guru
+       - github.com/motemen/gore
+       - github.com/nsf/gocode
+       - github.com/peco/peco/cmd/peco
+       - github.com/rogpeppe/godef
+       - github.com/tokozedg/sman
+
+   - name: Install golangci-lint.
+     become: true
+     become_user: merlin
+     ignore_errors: true
+     register: rustup
+     args:
+      chdir: /home/merlin
+     shell:
+       cmd: "curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin"
    - name: Setup abrazo dotfiles repo.
      become: true
      become_user: merlin
