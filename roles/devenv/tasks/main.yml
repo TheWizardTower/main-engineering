@@ -195,9 +195,12 @@
          - tmux-powerline
        state: absent
 
-   - name: Install pip3 packages (powerline).
+   - name: Install pip3 packages (ansible-lint, powerline, yamllint).
      pip:
-       name: powerline-status
+       name:
+         - ansible-lint
+         - powerline-status
+         - yamllint
        state: latest
        executable: pip3
 
