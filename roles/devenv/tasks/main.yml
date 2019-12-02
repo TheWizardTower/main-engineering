@@ -135,15 +135,19 @@
        - eslint-plugin-react
        - humanize-duration
        - js-beautify
+       - js-yaml
        - standard
 
-   - name: Setup eslint.
+   - name: Setup eslint and js-yaml.
      file:
-       path: "/home/merlin/local/bin/eslint"
-       src: "/home/merlin/node_modules/eslint/bin/eslint.js"
+       path: "/home/merlin/local/bin/{{ item }}"
+       src: "/home/merlin/node_modules/{{ item }}/bin/{{ item }}.js"
        state: link
        owner: merlin
        group: merlin
+     loop:
+       - eslint
+       - js-yaml
 
    - name: Setup js-beautify.
      file:
