@@ -347,6 +347,107 @@
       chdir: /home/merlin
      shell:
        cmd: "curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin"
+
+   - name: Install library packages for rust support commands.
+     dnf:
+       state: latest
+       name:
+         - libgit2-devel
+         - libssh2-devel
+         - openssl-devel
+         - openssl-libs
+         - pkgconf-pkg-config
+
+   - name: Updating rustup.
+     become: true
+     become_user: merlin
+     ignore_errors: true
+     register: rustup
+     args:
+      chdir: /home/merlin
+     shell:
+       cmd: "/home/merlin/.cargo/bin/rustup update"
+
+   - name: Create tmp dir.
+     file:
+       path: "/home/merlin/tmp"
+       state: directory
+       owner: merlin
+       group: merlin
+
+   - name: Get rustup install script.
+     when: '"not found" in rustup.stderr'
+     get_url:
+       url: "https://sh.rustup.rs"
+       mode: u=rwx
+       owner: merlin
+       dest: "/home/merlin/tmp/rustup.sh"
+       force: yes
+
+   - name: Install rustup.
+     become: true
+     become_user: merlin
+     when: '"not found" in rustup.stderr'
+     args:
+      chdir: /home/merlin
+     shell:
+       cmd: "sh ~/tmp/rustup.sh -y"
+
+   - name: Updating Cargo Update
+     become: true
+     become_user: merlin
+     ignore_errors: true
+     register: cargo_update
+     args:
+      chdir: /home/merlin
+     shell:
+       cmd: "cargo install-update cargo-update"
+
+   - name: Install Cargo Update.
+     become: true
+     become_user: merlin
+     when: '"no such subcommand" in cargo_update'
+     args:
+      chdir: /home/merlin
+     shell:
+       cmd: "cargo install --force cargo-update"
+
+   - name: Install cargo (rust) user tools.
+     become: true
+     become_user: merlin
+     args:
+      chdir: /home/merlin
+     shell:
+       cmd: "cargo install-update {{ item }}"
+     loop:
+       - cargo-check
+       - cargo-edit
+       - cargo-graph
+       - cargo-script
+       - cargo-watch
+       - kickstart
+       - ptags
+       - ripgrep
+       - xsv
+       - -a # update all packages.
+
+   # Broken at present, because clippy doesn't have a nightly build for linux.
+   # - name: Setup nightly build rustc toolchain.
+   #   become: true
+   #   become_user: merlin
+   #   args:
+   #    chdir: /home/merlin
+   #   shell:
+   #     cmd: "/home/merlin/.cargo/bin/rustup toolchain add nightly"
+
+   # - name: Install racer (rust tool that needs nightly)
+   #   become: true
+   #   become_user: merlin
+   #   args:
+   #     chdir: /home/merlin
+   #   shell:
+   #     cmd: "cargo install-update +nightly racer"
+
    - name: Setup abrazo dotfiles repo.
      become: true
      become_user: merlin
