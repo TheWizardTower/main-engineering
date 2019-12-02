@@ -134,7 +134,6 @@
        - eslint
        - eslint-config-standard
        - eslint-plugin-react
-       - humanize-duration
        - js-beautify
        - js-yaml
        - standard
@@ -161,14 +160,6 @@
        - 'css-beautify'
        - 'html-beautify'
        - 'js-beautify'
-
-   - name: Setup humanize-duration.
-     file:
-       path: "/home/merlin/local/bin/humanize-duration"
-       src: "/home/merlin/node_modules/humanize-duration/humanize-duration.js"
-       state: link
-       owner: merlin
-       group: merlin
 
    - name: Setup standard.
      file:
