@@ -184,6 +184,13 @@
        name: PHP_CodeSniffer
        state: latest
 
+   - name: Ensure packaged powerline is _not_ present.
+     dnf:
+       name:
+         - powerline
+         - tmux-powerline
+       state: absent
+
    - name: Install pip3 packages (powerline).
      pip:
        name: powerline-status
