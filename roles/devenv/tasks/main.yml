@@ -47,40 +47,41 @@
       dnf:
         state: latest
         name:
+          # - ntop
+          - PyYAML
           - ack
           - asciidoc
           - boost-static
-          - colordiff
-          - colorgcc
           - cabal-rpm
           - cargo
           - clang
-          - cmake
           - clojure
+          - cmake
+          - colordiff
+          - colorgcc
           - cowsay
           - cppcheck
-          - emacs
           - dash
+          - emacs
           - fish
-          - haskell-platform
-          - hlint
           - gcc-c++
           - gem
           - git
           - git-extras
           - git-svn
           - golang
+          - haskell-platform
+          - hlint
           - htop
           - hub
           - iftop
           - iotop
           - irssi
           - lynx
-          - mercurial
           - mc
+          - mercurial
           - most
           - npm
-          # - ntop
           - perl-core
           - perl-criticism
           - perltidy
@@ -89,7 +90,6 @@
           - pv
           - python
           - python3-pip
-          - PyYAML
           - rpmlint
           - ruby-devel
           - rust
