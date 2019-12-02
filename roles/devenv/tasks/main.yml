@@ -34,6 +34,7 @@
 
    - name: Install packaged development tools.
      dnf:
+       state: latest
        name:
          - ack
          - asciidoc
@@ -94,7 +95,6 @@
          - tree
          - vim-enhanced
          - zsh
-       state: present
 
    - name: Create ~/local/bin
      file:
