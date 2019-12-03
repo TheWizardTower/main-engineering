@@ -48,7 +48,6 @@
           - asciidoc
           - boost-static
           - cabal-rpm
-          - cargo
           - clang
           - clojure
           - cmake
@@ -88,11 +87,6 @@
           - python3-pip
           - rpmlint
           - ruby-devel
-          - rust
-          - rust-doc
-          - rust-lldb
-          - rust-src
-          - rust-std-static
           - screen
           - stack
           - strace
@@ -381,6 +375,16 @@
           - openssl-devel
           - openssl-libs
           - pkgconf-pkg-config
+
+    - name: Ensure packaged rust is _not_ present.
+      dnf:
+        name:
+          - rust
+          - rust-doc
+          - rust-lldb
+          - rust-src
+          - rust-std-static
+        state: absent
 
     - name: Updating rustup.
       become: true
