@@ -197,13 +197,13 @@
 
     - name: Install pip3 packages.
       pip:
+        state: latest
+        executable: pip3
         name:
           - ansible-lint
           - powerline-status
           - yamllint
           - yq
-        state: latest
-        executable: pip3
 
     - name: Install -devel packages for threadscope.
       dnf:
