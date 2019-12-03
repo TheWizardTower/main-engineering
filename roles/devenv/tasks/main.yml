@@ -336,7 +336,7 @@
 
     - name: Update golang godoc tool.
       shell:
-        cmd="go get -u golang.org/x/tools/cmd/godoc"
+        cmd: "go get -u golang.org/x/tools/cmd/godoc"
 
     - name: Install golang user tools.
       become: true
