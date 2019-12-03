@@ -232,10 +232,11 @@
     - name: Checkout a copy of Spacemacs.
       become: true
       become_user: merlin
-      git: repo=https://github.com/syl20bnr/spacemacs.git
-           dest=/home/merlin/spacemacs/.emacs.d
-           accept_hostkey=true
-           update=yes
+      git: 
+        repo: "https://github.com/syl20bnr/spacemacs.git"
+        dest: "/home/merlin/.emacs.d"
+        accept_hostkey: true
+        update: yes
 
     - name: Checkout a copy of Tmux Plugin Manager
       become: true
