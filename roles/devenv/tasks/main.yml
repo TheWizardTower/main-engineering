@@ -32,7 +32,7 @@
 
 
     - name: Enable the Haskell Stack COPR repo.
-      when: stack_copr.stat.exists is not defined
+      when: stack_copr.stat.exists is defined and not stack_copr.stat.exists
       shell:
         cmd: 'dnf copr enable petersen/stack -y'
       args:
