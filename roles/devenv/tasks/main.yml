@@ -64,7 +64,6 @@
           - git-extras
           - git-svn
           - golang
-          - haskell-platform
           - hlint
           - htop
           - hub
