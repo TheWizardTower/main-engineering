@@ -484,6 +484,14 @@
     #   shell:
     #     cmd: "cargo install-update +nightly racer"
 
+    - name: Install library packages for Stack utilities.
+      dnf:
+        state: latest
+        name:
+          - ncurses-devel
+          - ncurses-libs
+          - ncurses-compat-libs
+
     - name: Install stack (haskell) user tools.
       become: true
       become_user: merlin
