@@ -349,6 +349,13 @@
         - github.com/rogpeppe/godef
         - github.com/tokozedg/sman
 
+    - name: Create tmp dir.
+      file:
+        path: "/home/merlin/tmp"
+        state: directory
+        owner: merlin
+        group: merlin
+
     - name: Get golangcli-lint install script.
       get_url:
         url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh "
@@ -396,12 +403,6 @@
       shell:
         cmd: "/home/merlin/.cargo/bin/rustup update"
 
-    - name: Create tmp dir.
-      file:
-        path: "/home/merlin/tmp"
-        state: directory
-        owner: merlin
-        group: merlin
 
     - name: Get rustup install script.
       when: '"not found" in rustup.stderr'
