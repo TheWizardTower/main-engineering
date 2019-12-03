@@ -412,7 +412,7 @@
 
 
     - name: Get rustup install script.
-      when: '"not found" in rustup.stderr'
+      when: 'rustup.stderr is defined and rustup.stderr'
       get_url:
         url: "https://sh.rustup.rs"
         mode: u=rwx
@@ -423,7 +423,7 @@
     - name: Install rustup.
       become: true
       become_user: merlin
-      when: '"not found" in rustup.stderr'
+      when: 'rustup.stderr is defined and rustup.stderr'
       args:
         chdir: /home/merlin
       shell:
@@ -437,16 +437,16 @@
       args:
         chdir: /home/merlin
       shell:
-        cmd: "cargo install-update cargo-update"
+        cmd: "/home/merlin/.cargo/bin/cargo install-update cargo-update"
 
     - name: Install Cargo Update.
       become: true
       become_user: merlin
-      when: '"no such subcommand" in cargo_update'
+      when: '"no such subcommand" in cargo_update.stderr'
       args:
         chdir: /home/merlin
       shell:
-        cmd: "cargo install --force cargo-update"
+        cmd: "/home/merlin/.cargo/bin/cargo install --force cargo-update"
 
     - name: Install cargo (rust) user tools.
       become: true
@@ -454,7 +454,7 @@
       args:
         chdir: /home/merlin
       shell:
-        cmd: "cargo install-update {{ item }}"
+        cmd: "/home/merlin/.cargo/bin/cargo install-update {{ item }}"
       loop:
         - cargo-check
         - cargo-edit
