@@ -22,12 +22,7 @@
           - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.stdout }}.noarch.rpm"
           - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm"
 
-    - name: Install libselinux.
       dnf:
-        state: latest
-        name:
-          - libselinux-python
-          - libselinux-python3
 
     - name: Check for COPR configuration file.
       changed_when: false
