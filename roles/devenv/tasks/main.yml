@@ -223,6 +223,13 @@
            accept_hostkey=yes
            update=no
 
+    - name: Setup abrazo dotfiles.
+      become: true
+      become_user: merlin
+      shell: "/home/merlin/abrazo/install"
+      args:
+        chdir: /home/merlin/abrazo
+
     - name: Checkout a copy of Spacemacs.
       become: true
       become_user: merlin
@@ -503,12 +510,21 @@
         # - pandoc
         # - threadscope
 
-    - name: Setup abrazo dotfiles repo.
+    - name: Get ELPA GPG key.
       become: true
       become_user: merlin
-      shell: "/home/merlin/dotfiles/install"
       args:
-        chdir: /home/merlin/dotfiles
+        chdir: /home/merlin
+      shell:
+        cmd: 'gpg --homedir ~/.emacs.d/elpa/gnupg --receive-keys 066DAFCB81E42C40'
+
+    - name: Install/Update Emacs Packages
+      become: true
+      become_user: merlin
+      args:
+        chdir: /home/merlin
+      shell:
+        cmd: 'emacs --batch -l ~/.emacs.d/init.el --eval="(configuration-layer/update-packages t)"'
 
     - name: Update packages.
       dnf:
