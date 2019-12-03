@@ -374,7 +374,7 @@
     - name: Install golangci-lint.
       become: true
       become_user: merlin
-      register: rustup
+      register: golangcli
       args:
         chdir: /home/merlin
       shell:
