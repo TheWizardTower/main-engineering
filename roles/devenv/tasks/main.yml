@@ -22,8 +22,6 @@
           - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.stdout }}.noarch.rpm"
           - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm"
 
-      dnf:
-
     - name: Check for COPR configuration file.
       changed_when: false
       stat:
@@ -58,6 +56,7 @@
           - dash
           - emacs
           - fish
+          - fortune-mod
           - gcc-c++
           - gem
           - git
