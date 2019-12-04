@@ -265,6 +265,7 @@
         update: true
       loop:
         - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
+        - { src: 'https://github.com/BiteMyApp/lefortovo.git', dest: 'lefortovo' }
         - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
         - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
         - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
@@ -482,6 +483,14 @@
     #     chdir: /home/merlin
     #   shell:
     #     cmd: "cargo install-update +nightly racer"
+
+    - name: Install lefortovo.
+      become: true
+      become_user: merlin
+      # when: "gitclone.stdout"
+      shell: "/home/merlin/.cargo/bin/cargo install"
+      args:
+        chdir: /home/merlin/git/lefortovo
 
     - name: Install library packages for Stack utilities.
       dnf:
