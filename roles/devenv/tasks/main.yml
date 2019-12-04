@@ -70,6 +70,7 @@
           - iotop
           - irssi
           - jq
+          - lsof
           - lynx
           - mc
           - mercurial
