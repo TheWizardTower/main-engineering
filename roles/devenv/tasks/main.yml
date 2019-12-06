@@ -347,15 +347,15 @@
       shell:
         cmd: "go get -u {{ item }}"
       loop:
-        - golang.org/x/tools/cmd/cover
         - github.com/kbrgl/fu
-        - golang.org/x/tools/cmd/gorename
-        - golang.org/x/tools/cmd/guru
         - github.com/motemen/gore
         - github.com/nsf/gocode
         - github.com/peco/peco/cmd/peco
         - github.com/rogpeppe/godef
         - github.com/tokozedg/sman
+        - golang.org/x/tools/cmd/cover
+        - golang.org/x/tools/cmd/gorename
+        - golang.org/x/tools/cmd/guru
 
     - name: Create tmp dir.
       file:
