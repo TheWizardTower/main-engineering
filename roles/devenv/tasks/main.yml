@@ -350,7 +350,6 @@
         - github.com/kbrgl/fu
         - github.com/motemen/gore
         - github.com/nsf/gocode
-        - github.com/orhun/pkgtop
         - github.com/peco/peco/cmd/peco
         - github.com/rogpeppe/godef
         - github.com/tokozedg/sman
