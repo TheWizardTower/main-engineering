@@ -274,6 +274,7 @@
         - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
         - { src: 'https://github.com/bobthecow/git-flow-completion.git', dest: 'git-flow-completion', }
         - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
+        - { src: 'https://github.com/chrisdone/jl.git', dest: 'jl' }
         - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
         - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
         - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
@@ -342,6 +343,13 @@
       shell: "make; make install; make install-doc; make install-release-doc"
       args:
         chdir: /home/merlin/git/tig
+
+    - name: Build and install jl.
+      become: true
+      become_user: merlin
+      shell: stack install
+      args:
+        chdir: "/home/merlin/git/jl"
 
     - name: Update golang godoc tool.
       shell:
