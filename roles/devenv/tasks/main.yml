@@ -429,7 +429,7 @@
 
 
     - name: Get rustup install script.
-      when: 'rustup.stderr is defined and rustup.stderr'
+      when: 'rustup.failed is defined and rustup.failed'
       get_url:
         url: "https://sh.rustup.rs"
         mode: u=rwx
@@ -440,7 +440,7 @@
     - name: Install rustup.
       become: true
       become_user: merlin
-      when: 'rustup.stderr is defined and rustup.stderr'
+      when: 'rustup.failed is defined and rustup.failed'
       args:
         chdir: /home/merlin
       shell:
@@ -505,7 +505,7 @@
       become: true
       become_user: merlin
       # when: "gitclone.stdout"
-      shell: "/home/merlin/.cargo/bin/cargo install"
+      shell: "/home/merlin/.cargo/bin/cargo install --force"
       args:
         chdir: /home/merlin/git/lefortovo
 
