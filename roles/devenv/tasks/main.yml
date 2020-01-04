@@ -207,6 +207,7 @@
         executable: pip3
         name:
           - ansible-lint
+          - black
           - flake8
           - powerline-status
           - pylint
