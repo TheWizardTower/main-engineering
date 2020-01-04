@@ -207,7 +207,9 @@
         executable: pip3
         name:
           - ansible-lint
+          - flake8
           - powerline-status
+          - pylint
           - yamllint
           - yq
 
