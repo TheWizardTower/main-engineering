@@ -374,11 +374,14 @@
         cmd: "go get -u {{ item }}"
       loop:
         - github.com/kbrgl/fu
+        - github.com/kisielk/errcheck
+        - github.com/mdempsky/unconvert
         - github.com/motemen/gore
         - github.com/nsf/gocode
         - github.com/peco/peco/cmd/peco
         - github.com/rogpeppe/godef
         - github.com/tokozedg/sman
+        - golang.org/x/lint/golint
         - golang.org/x/tools/cmd/cover
         - golang.org/x/tools/cmd/gorename
         - golang.org/x/tools/cmd/guru
