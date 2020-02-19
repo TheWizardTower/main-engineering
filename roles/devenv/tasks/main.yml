@@ -286,6 +286,7 @@
         - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
         - { src: 'https://github.com/chrisdone/jl.git', dest: 'jl' }
         - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
+        - { src: 'https://github.com/dominikh/go-tools.git', dest: 'go-tools' }
         - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
         - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
         - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
@@ -321,6 +322,13 @@
       shell: "fish -lc 'go get ./...; and go build src/pkgtop.go && mv pkgtop /home/merlin/gocode/bin'"
       args:
         chdir: /home/merlin/git/pkgtop
+
+    - name: Build and install go-tools.
+      become: true
+      become_user: merlin
+      shell: "fish -lc 'for ii in (ls); echo $ii; pushd $ii; go get -u; popd; end'"
+      args:
+        chdir: /home/merlin/git/go-tools/cmd
 
     - name: Setup fzf.
       become: true
