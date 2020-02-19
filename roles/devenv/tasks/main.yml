@@ -535,7 +535,9 @@
       shell:
         cmd: "stack install {{ item }}"
       loop:
+        - bench
         - cpphs
+        - criterion
         - dhall
         - ghcid
         - happy
