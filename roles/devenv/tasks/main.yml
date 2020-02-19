@@ -60,6 +60,7 @@
           - cowsay
           - cppcheck
           - dash
+          - docker
           - emacs
           - fish
           - fortune-mod
