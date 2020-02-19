@@ -39,7 +39,7 @@
     - name: Copy a functional version of systemctl if we're on WSL.
       when: "'Microsoft' in ansible_facts.kernel"
       get_url:
-        url: "https://github.com/gdraheim/docker-systemctl-replacement/blob/master/files/docker/systemctl.py"
+        url: "https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py"
         dest: "/usr/bin/systemctl"
         mode: +x
     - name: Install packaged development tools.
