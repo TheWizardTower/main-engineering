@@ -381,6 +381,9 @@
       shell:
         cmd: "go get -u {{ item }}"
       loop:
+        - github.com/anacrolix/missinggo
+        - github.com/bradfitz/iter
+        - github.com/google/btree
         - github.com/kbrgl/fu
         - github.com/kisielk/errcheck
         - github.com/mdempsky/unconvert
@@ -388,6 +391,7 @@
         - github.com/nsf/gocode
         - github.com/peco/peco/cmd/peco
         - github.com/rogpeppe/godef
+        - github.com/ryszard/goskiplist/skiplist
         - github.com/tokozedg/sman
         - golang.org/x/lint/golint
         - golang.org/x/tools/cmd/cover
