@@ -42,7 +42,8 @@
         url: "https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py"
         dest: "/usr/bin/systemctl"
         mode: +x
-    - name: Install packaged development tools.
+
+    - name: Install packaged development/benchmarking/introspection tools.
       dnf:
         state: latest
         name:
