@@ -403,7 +403,7 @@
       shell:
         cmd: "go get -u golang.org/x/tools/cmd/godoc"
 
-    - name: Install golang user tools.
+    - name: Install golang user tools and libraries.
       become: true
       become_user: merlin
       args:
