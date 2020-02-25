@@ -533,6 +533,7 @@
         - cargo-graph
         - cargo-script
         - cargo-watch
+        - flamegraph
         - kickstart
         - ptags
         - ripgrep
@@ -585,6 +586,7 @@
         - cpphs
         - criterion
         - dhall
+        - ghc-prof-flamegraph
         - ghcid
         - happy
         - hasktags
