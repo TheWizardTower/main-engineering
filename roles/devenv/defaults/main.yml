@@ -1,0 +1,5 @@
+---
+user: "merlin"
+
+simple_npm_packages: ['acorn', 'jshint', 'tern', 'youtube-dl']
+...

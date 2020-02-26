@@ -1,109 +1,122 @@
 ---
- - hosts: localhost
-   tasks:
+- name: Setup Adobe yum repo.
+  shell: '/usr/bin/rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm ||:'
 
-   - name: Setup Adobe yum repo.
-     shell: '/usr/bin/rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm ||:'
+- name: Setup Google Chrome repo file.
+  copy: src=~/git/main-engineering/google-chrome.repo dest=/etc/yum.repos.d/google-chrome.repo owner=root group=root mode=0644
 
-   - name: Setup Google Chrome repo file.
-     copy: src=~/git/main-engineering/google-chrome.repo dest=/etc/yum.repos.d/google-chrome.repo owner=root group=root mode=0644
+- name: Setup VirtualBox Repo.
+  copy: src=~/git/main-engineering/VirtualBox.repo dest=/etc/yum.repos.d/VirtualBox.repo owner=root group=root mode=0644
 
-   - name: Setup VirtualBox Repo.
-     copy: src=~/git/main-engineering/VirtualBox.repo dest=/etc/yum.repos.d/VirtualBox.repo owner=root group=root mode=0644
+- name: Import Google Chrome public key.
+  shell: '/bin/rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub'
 
-   - name: Import Google Chrome public key.
-     shell: '/bin/rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub'
+- name: Install dnf-plugins-core for brave.
+  dnf:
+    name: dnf-plugins-core
+    status: latest
 
-   - name: Create a plasma configuration directory.
-     become: true
-     become_user: merlin
-     shell: '/bin/mkdir -p /home/merlin/.config/plasma-workspace/env'
+- name: Install Brave repo.
+  shell: 'dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/'
 
-   - name: Create a file to set KDEs default window manager to xmonad.
-     copy: src=~/git/main-engineering/set_window_manager.sh dest=/home/merlin/.config/plasma-workspace/env
+- name: Import brave package key.
+  shell: 'rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc'
 
-   - name: Install packaged desktop tools.
-     dnf:
-       name:
-         - GraphicsMagick
-         - ImageMagick
-         - NetworkManager-tui
-         - VirtualBox-5.1 # Needs the virtualbox repo.
-         - amarok-utils
-         - darktable
-         - digikam
-         - dkms
-         - dmenu
-         - docker-io
-         - dzen2
-         - exfat-utils
-         - firefox
-         - flash-plugin
-         - fortune-mod
-         - free42
-         - fuse-exfat
-         - gimp
-         - google-chrome-stable # Needs the google chrome repo.
-         - gparted
-         - gpodder
-         - imlib2
-         - imlib2-devel
-         - kdenlive
-         - kernel-devel
-         - kernel-headers
-         - levien-inconsolata-fonts
-         - libXpm-devel
-         - libxml2-static
-         - libxml++-devel
-         - libxml++30-devel
-         - libxml-devel
-         - obs-studio
-         - paman
-         - paprefs
-         - pavucontrol
-         - pavumeter
-         - pidgin
-         - pidgin-otr
-         - plasma-applet-redshift-control
-         - purple-plugin-pack
-         - redshift
-         - seamonkey
-         - sl
-         - sysstat
-         - tigervnc
-         - ufraw
-         - unetbootin
-         - vim-X11
-         - vnstat
-         - wireless-tools-devel
-         - xcompmgr
-         - Xdialog
-         - xmonad
-         - xsel
-         - yakuake
-       state: present
+- name: Create a plasma configuration directory.
+  become: true
+  become_user: "{{ user }}"
+  shell: '/bin/mkdir -p /home/{{ user }}/.config/plasma-workspace/env'
 
-   - name: Checkout the fonts repo.
-     become: true
-     become_user: merlin
-     git: repo=https://github.com/powerline/fonts.git
-          accept_hostkey=true
-          dest=/home/merlin/git/fonts
-          update=yes 
+- name: Create a file to set KDEs default window manager to xmonad.
+  copy:
+    src: "~/git/main-engineering/set_window_manager.sh"
+    dest: "/home/{{ user }}/.config/plasma-workspace/env"
 
-  - name: Checkout cathode ray tube terminal emulator!
-     become: true
-     become_user: merlin
-     git: repo={{ item.src }}
-          accept_hostkey=true
-          dest=/home/merlin/git/{{ item.dest }}
-          update=yes
-     with_items:
-       - { src: 'https://github.com/thestinger/termite.git', dest: 'termite' }
-       - { src: 'https://github.com/thestinger/vte-ng.git', dest: 'vte-ng' }
+- name: Install packaged desktop tools.
+  dnf:
+    name:
+      - GraphicsMagick
+      - ImageMagick
+      - NetworkManager-tui
+      - VirtualBox-5.1 # Needs the virtualbox repo.
+      - Xdialog
+      - amarok-utils
+      - brave-browser
+      - darktable
+      - digikam
+      - dkms
+      - dmenu
+      - docker-io
+      - dzen2
+      - exfat-utils
+      - firefox
+      - flash-plugin
+      - fortune-mod
+      - free42
+      - fuse-exfat
+      - gimp
+      - google-chrome-stable # Needs the google chrome repo.
+      - gparted
+      - gpodder
+      - imlib2
+      - imlib2-devel
+      - kdenlive
+      - kernel-devel
+      - kernel-headers
+      - levien-inconsolata-fonts
+      - libXpm-devel
+      - libxml++-devel
+      - libxml++30-devel
+      - libxml-devel
+      - libxml2-static
+      - obs-studio
+      - paman
+      - paprefs
+      - pavucontrol
+      - pavumeter
+      - pidgin
+      - pidgin-otr
+      - plasma-applet-redshift-control
+      - purple-plugin-pack
+      - redshift
+      - seamonkey
+      - sl
+      - sysstat
+      - tigervnc
+      - ufraw
+      - unetbootin
+      - vim-X11
+      - vnstat
+      - wireless-tools-devel
+      - xcompmgr
+      - xmonad
+      - xsel
+      - yakuake
+    state: latest
+
+- name: Checkout the fonts repo.
+  become: true
+  become_user: "{{ user }}"
+  git:
+    repo: https://github.com/powerline/fonts.git
+    accept_hostkey: true
+    dest: "/home/{{ user }}/git/fonts"
+    update: yes
+
+- name: Checkout cathode ray tube terminal emulator!
+  become: true
+  become_user: "{{ user }}"
+  git:
+    repo: "{{ item.src }}"
+    accept_hostkey: true
+    dest: "/home/{{ user }}/git/{{ item.dest }}"
+    update: yes
+  loop:
+    - { src: 'https://github.com/thestinger/termite.git', dest: 'termite' }
+    - { src: 'https://github.com/thestinger/vte-ng.git', dest: 'vte-ng' }
 
 
-   - name: Setup fonts.
-     become: true
-     become_user: merlin
-     shell: "/home/merlin/git/fonts/install.sh"
+- name: Setup fonts.
+  become: true
+  become_user: "{{ user }}"
+  shell: "/home/{{ user }}/git/fonts/install.sh"

@@ -1,0 +1,12 @@
+---
+- name: Run dev_env tasks.
+  hosts: dev_machines
+  roles:
+    - ./roles/devenv
+
+- name: Run Desktops tasks.
+  hosts: desktop_machines
+  roles:
+    - ./roles/desktop
+
+...

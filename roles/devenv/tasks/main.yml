@@ -1,688 +1,700 @@
 ---
-- hosts: localhost
-  vars:
-    simple_npm_packages: ['acorn', 'jshint', 'tern', 'youtube-dl']
-  tasks:
-    - name: Ensure docker group is present.
-      group: name=docker state=present
+- name: Ensure docker group is present.
+  group:
+    name: docker
+    state: present
 
-    - name: Capture Fedora release number.
-      # warn: false # the rpm/dnf module doesn't let us do this, so don't chide
-      # us to use it.
-      shell: '/bin/rpm -E %fedora'
-      args:
-        warn: false
-      register: rpm_release
-      changed_when: false
+- name: Capture Fedora release number.
+  # warn: false # the rpm/dnf module doesn't let us do this, so don't chide
+  # us to use it.
+  shell: '/bin/rpm -E %fedora'
+  args:
+    warn: false
+  register: rpm_release
+  changed_when: false
 
-    - name: Enable RPMFusion Free and Non-Free.
-      dnf:
-        state: latest
-        name:
-          - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.stdout }}.noarch.rpm"
-          - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm"
+- name: Enable RPMFusion Free and Non-Free.
+  dnf:
+    state: latest
+    name:
+      - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.stdout }}.noarch.rpm"
+      - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm"
 
-    - name: Check for COPR configuration file.
-      changed_when: false
-      stat:
-        path: "/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:petersen:stack.repo"
-      register: stack_copr
+- name: Check for COPR configuration file.
+  changed_when: false
+  stat:
+    path: "/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:petersen:stack.repo"
+  register: stack_copr
 
 
-    - name: Enable the Haskell Stack COPR repo.
-      when: stack_copr.stat.exists is defined and not stack_copr.stat.exists
-      shell:
-        cmd: 'dnf copr enable petersen/stack -y'
-      args:
-        warn: false
+- name: Enable the Haskell Stack COPR repo.
+  when: stack_copr.stat.exists is defined and not stack_copr.stat.exists
+  shell:
+    cmd: 'dnf copr enable petersen/stack -y'
+    args:
+      warn: false
 
-    - name: Copy a functional version of systemctl if we're on WSL.
-      when: "'Microsoft' in ansible_facts.kernel"
-      get_url:
-        url: "https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py"
-        dest: "/usr/bin/systemctl"
-        mode: +x
+- name: Copy a functional version of systemctl if we're on WSL.
+  when: "'Microsoft' in ansible_facts.kernel"
+  get_url:
+    url: "https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py"
+    dest: "/usr/bin/systemctl"
+    mode: +x
 
-    - name: Install packaged development/benchmarking/introspection tools.
-      dnf:
-        state: latest
-        name:
-          # - ntop
-          - PyYAML
-          - ack
-          - asciidoc
-          - atop
-          - blktrace
-          - boost-static
-          - cabal-rpm
-          - clang
-          - clojure
-          - cmake
-          - colordiff
-          - colorgcc
-          - cowsay
-          - cppcheck
-          - dash
-          - docker
-          - emacs
-          - ethtool
-          - fatrace
-          - fio
-          - fish
-          - flamegraph
-          - fortune-mod
-          - gcc-c++
-          - gdb
-          - gem
-          - git
-          - git-extras
-          - git-svn
-          - golang
-          - hdparm
-          - hlint
-          - hping3
-          - htop
-          - httpd-tools
-          - hub
-          - iftop
-          - iotop
-          - iperf
-          - iproute
-          - irssi
-          - jq
-          - lldpad
-          - lsof
-          - ltrace
-          - lynx
-          - mc
-          - mercurial
-          - most
-          - mtr
-          - net-tools
-          - nload
-          - npm
-          - numactl
-          - pcp-system-tools
-          - perf
-          - perl-core
-          - perl-criticism
-          - perltidy
-          - php-pear
-          - procps-ng
-          - psmisc
-          - pv
-          - python
-          - python3-pip
-          - rpmlint
-          - ruby-devel
-          - screen
-          - stack
-          - strace
-          - subversion
-          - sysbench
-          - sysstat
-          - systemtap
-          - tcpdump
-          - the_silver_searcher
-          - tiptop
-          - tmux
-          - traceroute
-          - tree
-          - ttcp
-          - vim-enhanced
-          - zsh
+- name: Install packaged development/benchmarking/introspection tools.
+  dnf:
+    state: latest
+    name:
+      # - ntop
+      - PyYAML
+      - ack
+      - asciidoc
+      - atop
+      - blktrace
+      - boost-static
+      - cabal-rpm
+      - clang
+      - clojure
+      - cmake
+      - colordiff
+      - colorgcc
+      - cowsay
+      - cppcheck
+      - dash
+      - docker
+      - emacs
+      - ethtool
+      - fatrace
+      - fio
+      - fish
+      - flamegraph
+      - fortune-mod
+      - gcc-c++
+      - gdb
+      - gem
+      - git
+      - git-extras
+      - git-svn
+      - golang
+      - hdparm
+      - hlint
+      - hping3
+      - htop
+      - httpd-tools
+      - hub
+      - iftop
+      - iotop
+      - iperf
+      - iproute
+      - irssi
+      - jq
+      - lldpad
+      - lsof
+      - ltrace
+      - lynx
+      - mc
+      - mercurial
+      - most
+      - mtr
+      - net-tools
+      - nload
+      - npm
+      - numactl
+      - pcp-system-tools
+      - perf
+      - perl-core
+      - perl-criticism
+      - perltidy
+      - php-pear
+      - procps-ng
+      - psmisc
+      - pv
+      - python
+      - python3-pip
+      - rpmlint
+      - ruby-devel
+      - screen
+      - stack
+      - strace
+      - subversion
+      - sysbench
+      - sysstat
+      - systemtap
+      - tcpdump
+      - the_silver_searcher
+      - tiptop
+      - tmux
+      - traceroute
+      - tree
+      - ttcp
+      - vim-enhanced
+      - zsh
 
-    - name: Create ~/local/bin
-      file:
-        path: "/home/merlin/{{ item }}"
-        state: directory
-        owner: merlin
-        group: merlin
-      loop:
-        - "local"
-        - "local/bin"
+- name: Create ~/local/bin
+  file:
+    path: "/home/{{ user }}/{{ item }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  loop:
+    - "local"
+    - "local/bin"
 
-    - name: Install "simple" npm packages.
-      loop: "{{ simple_npm_packages }}"
-      npm:
-        name: "{{ item }}"
-        state: latest
-        global: false
-        path: /home/merlin
+- name: Install "simple" npm packages.
+  loop: "{{ simple_npm_packages }}"
+  npm:
+    name: "{{ item }}"
+    state: latest
+    global: false
+    path: "/home/{{ user }}"
 
-    - name: Configure "simple" npm packages.
-      loop: "{{ simple_npm_packages }}"
-      file:
-        path: "/home/merlin/local/bin/{{ item }}"
-        src: "/home/merlin/node_modules/{{ item }}/bin/{{ item }}"
-        state: link
-        owner: merlin
-        group: merlin
+- name: Configure "simple" npm packages.
+  loop: "{{ simple_npm_packages }}"
+  file:
+    path: "/home/{{ user }}/local/bin/{{ item }}"
+    src: "/home/{{ user }}/node_modules/{{ item }}/bin/{{ item }}"
+    state: link
+    owner: "{{ user }}"
+    group: "{{ user }}"
 
-    - name: Install not-so-simple npm packages.
-      npm:
-        name: "{{ item }}"
-        state: latest
-        global: false
-        path: /home/merlin
-      loop:
-        - align-yaml
-        - eslint
-        - eslint-config-standard
-        - eslint-plugin-react
-        - js-beautify
-        - js-yaml
-        - standard
+- name: Install not-so-simple npm packages.
+  npm:
+    name: "{{ item }}"
+    state: latest
+    global: false
+    path: "/home/{{ user }}"
+  loop:
+    - align-yaml
+    - eslint
+    - eslint-config-standard
+    - eslint-plugin-react
+    - js-beautify
+    - js-yaml
+    - standard
 
-    - name: Setup eslint and js-yaml.
-      file:
-        path: "/home/merlin/local/bin/{{ item }}"
-        src: "/home/merlin/node_modules/{{ item }}/bin/{{ item }}.js"
-        state: link
-        owner: merlin
-        group: merlin
-      loop:
-        - eslint
-        - js-yaml
+- name: Setup eslint and js-yaml.
+  file:
+    path: "/home/{{ user }}/local/bin/{{ item }}"
+    src: "/home/{{ user }}/node_modules/{{ item }}/bin/{{ item }}.js"
+    state: link
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  loop:
+    - eslint
+    - js-yaml
 
-    - name: Setup js-beautify.
-      file:
-        path: "/home/merlin/local/bin/{{ item }}"
-        src: "/home/merlin/node_modules/js-beautify/js/bin/{{ item }}.js"
-        state: link
-        owner: merlin
-        group: merlin
-      loop:
-        - 'css-beautify'
-        - 'html-beautify'
-        - 'js-beautify'
+- name: Setup js-beautify.
+  file:
+    path: "/home/{{ user }}/local/bin/{{ item }}"
+    src: "/home/{{ user }}/node_modules/js-beautify/js/bin/{{ item }}.js"
+    state: link
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  loop:
+    - 'css-beautify'
+    - 'html-beautify'
+    - 'js-beautify'
 
-    - name: Setup align-yaml.
-      file:
-        path: "/home/merlin/local/bin/align"
-        src: "/home/merlin/node_modules/align-yaml/bin/align"
-        state: link
-        owner: merlin
-        group: merlin
+- name: Setup align-yaml.
+  file:
+    path: "/home/{{ user }}/local/bin/align"
+    src: "/home/{{ user }}/node_modules/align-yaml/bin/align"
+    state: link
+    owner: "{{ user }}"
+    group: "{{ user }}"
 
-    - name: Setup standard.
-      file:
-        path: "/home/merlin/local/bin/standard"
-        src: "/home/merlin/node_modules/standard/bin/cmd.js"
-        state: link
-        owner: merlin
-        group: merlin
+- name: Setup standard.
+  file:
+    path: "/home/{{ user }}/local/bin/standard"
+    src: "/home/{{ user }}/node_modules/standard/bin/cmd.js"
+    state: link
+    owner: "{{ user }}"
+    group: "{{ user }}"
 
-    - name: Install Gem package (sqlint).
-      gem:
-        name: sqlint
-        state: latest
-        user_install: false
+- name: Install Gem package (sqlint).
+  gem:
+    name: sqlint
+    state: latest
+    user_install: false
 
-    - name: Install Pear packages (phpcs).
-      pear:
-        name: PHP_CodeSniffer
-        state: latest
+- name: Install Pear packages (phpcs).
+  pear:
+    name: PHP_CodeSniffer
+    state: latest
 
-    - name: Ensure packaged powerline is _not_ present.
-      dnf:
-        name:
-          - powerline
-          - tmux-powerline
-        state: absent
+- name: Ensure packaged powerline is _not_ present.
+  dnf:
+    name:
+      - powerline
+      - tmux-powerline
+    state: absent
 
-    - name: Install pip3 packages.
-      pip:
-        state: latest
-        executable: pip3
-        name:
-          - ansible-lint
-          - black
-          - flake8
-          - powerline-status
-          - pylint
-          - yamllint
-          - yq
+- name: Install pip3 packages.
+  pip:
+    state: latest
+    executable: pip3
+    name:
+      - ansible-lint
+      - black
+      - flake8
+      - powerline-status
+      - pylint
+      - yamllint
+      - yq
 
-    - name: Install -devel packages for threadscope.
-      dnf:
-        state: latest
-        name:
-          - cairo-devel
-          - glib2-devel
-          - gtk2-devel
-          - pango-devel
+- name: Install -devel packages for threadscope.
+  dnf:
+    state: latest
+    name:
+      - cairo-devel
+      - glib2-devel
+      - gtk2-devel
+      - pango-devel
 
-    - name: Checkout Dotfiles repo.
-      become: true
-      become_user: merlin
-      git: repo=https://github.com/TheWizardTower/abrazo.git
-           dest=/home/merlin/abrazo
-           accept_hostkey=yes
-           update=no
+- name: Checkout Dotfiles repo.
+  become: true
+  become_user: "{{ user }}"
+  git:
+    repo: https://github.com/TheWizardTower/abrazo.git
+    dest: "/home/{{ user }}/abrazo"
+    accept_hostkey: yes
+    update: no
 
-    - name: Setup abrazo dotfiles.
-      become: true
-      become_user: merlin
-      shell: "/home/merlin/abrazo/install"
-      args:
-        chdir: /home/merlin/abrazo
+- name: Setup abrazo dotfiles.
+  become: true
+  become_user: "{{ user }}"
+  shell: "/home/{{ user }}/abrazo/install"
+  args:
+    chdir: "/home/{{ user }}/abrazo"
 
-    - name: Checkout a copy of Spacemacs.
-      become: true
-      become_user: merlin
-      git: 
-        repo: "https://github.com/syl20bnr/spacemacs.git"
-        dest: "/home/merlin/.emacs.d"
-        accept_hostkey: true
-        update: yes
+- name: Checkout a copy of Spacemacs.
+  become: true
+  become_user: "{{ user }}"
+  git: 
+    repo: "https://github.com/syl20bnr/spacemacs.git"
+    dest: "/home/{{ user }}/.emacs.d"
+    accept_hostkey: true
+    update: yes
 
-    - name: Checkout a copy of Tmux Plugin Manager
-      become: true
-      become_user: merlin
-      git:
-        repo: https://github.com/tmux-plugins/tpm
-        dest: /home/merlin/.tmux/plugins/tpm
-        accept_hostkey: true
-        update: true
+- name: Checkout a copy of Tmux Plugin Manager
+  become: true
+  become_user: "{{ user }}"
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "/home/{{ user }}/.tmux/plugins/tpm"
+    accept_hostkey: true
+    update: true
 
-    - name: Create ~/git
-      become: true
-      become_user: merlin
-      file:
-        path: "/home/merlin/git"
-        state: directory
+- name: Create ~/git
+  become: true
+  become_user: "{{ user }}"
+  file:
+    path: "/home/{{ user }}/git"
+    state: directory
 
-    # Need to make the ~/git dir
-    - name: Checkout useful git repos.
-      become: true
-      become_user: merlin
-      register: gitclone
-      git:
-        repo: "{{ item.src }}"
-        accept_hostkey: true
-        dest: "/home/merlin/git/{{ item.dest }}"
-        update: true
-      loop:
-        - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
-        - { src: 'https://github.com/BiteMyApp/lefortovo.git', dest: 'lefortovo' }
-        - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
-        - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
-        - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
-        - { src: 'https://github.com/agda/agda.git', dest: 'agda' }
-        - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
-        - { src: 'https://github.com/bobthecow/git-flow-completion.git', dest: 'git-flow-completion', }
-        - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
-        - { src: 'https://github.com/chrisdone/jl.git', dest: 'jl' }
-        - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
-        - { src: 'https://github.com/dominikh/go-tools.git', dest: 'go-tools' }
-        - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
-        - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
-        - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
-        - { src: 'https://github.com/girst/solvitaire.git', dest: 'solvitaire' }
-        - { src: 'https://github.com/github/hub.git', dest: 'hub' }
-        - { src: 'https://github.com/jonas/tig.git', dest: 'tig' }
-        - { src: 'https://github.com/joshuaclayton/unused.git', dest: 'unused' }
-        - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
-        - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
-        - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
-        - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
-        - { src: 'https://github.com/orhun/pkgtop.git', dest: 'pkgtop' } 
-        - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
-        - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
-        - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
-        - { src: 'https://github.com/trapd00r/LS_COLORS.git', dest: 'LS_COLORS' }
-        - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
-        - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
+# Need to make the ~/git dir
+- name: Checkout useful git repos.
+  become: true
+  become_user: "{{ user }}"
+  register: gitclone
+  # github.com is crashing rn.
+  ignore_errors: true
+  git:
+    repo: "{{ item.src }}"
+    accept_hostkey: true
+    dest: "/home/{{ user }}/git/{{ item.dest }}"
+    update: true
+  loop:
+    - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
+    - { src: 'https://github.com/BiteMyApp/lefortovo.git', dest: 'lefortovo' }
+    - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
+    - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
+    - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
+    - { src: 'https://github.com/agda/agda.git', dest: 'agda' }
+    - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
+    - { src: 'https://github.com/bobthecow/git-flow-completion.git', dest: 'git-flow-completion', }
+    - { src: 'https://github.com/carlohamalainen/ghc-imported-from', dest: 'ghc-imported-from' }
+    - { src: 'https://github.com/chrisdone/jl.git', dest: 'jl' }
+    - { src: 'https://github.com/creichert/stack-tag.git', dest: 'stack-tag' }
+    - { src: 'https://github.com/dominikh/go-tools.git', dest: 'go-tools' }
+    - { src: 'https://github.com/edc/bass.git', dest: 'bass' }
+    - { src: 'https://github.com/favadi/flycheck-gometalinter.git', dest: 'flycheck-gometalinter' }
+    - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
+    - { src: 'https://github.com/girst/solvitaire.git', dest: 'solvitaire' }
+    - { src: 'https://github.com/github/hub.git', dest: 'hub' }
+    - { src: 'https://github.com/jonas/tig.git', dest: 'tig' }
+    - { src: 'https://github.com/joshuaclayton/unused.git', dest: 'unused' }
+    - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
+    - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
+    - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
+    - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
+    - { src: 'https://github.com/orhun/pkgtop.git', dest: 'pkgtop' } 
+    - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
+    - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
+    - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
+    - { src: 'https://github.com/trapd00r/LS_COLORS.git', dest: 'LS_COLORS' }
+    - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
+    - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
-    - debug:
-        var: gitclone
+- debug:
+    var: gitclone
 
-    - name: Setup bass.
-      become: true
-      become_user: merlin
-      shell: "make install"
-      args:
-        chdir: /home/merlin/git/bass
-      when:
-        - item['item']['dest'] == "bass"
-        - item['changed'] == "true"
-      loop:
-        "{{ gitclone.results }}"
-      loop_control:
-        loop_var: item
-      
+- name: Setup bass.
+  become: true
+  become_user: "{{ user }}"
+  shell: "make install"
+  args:
+    chdir: "/home/{{ user }}/git/bass"
+  when:
+    - item['item']['dest'] == "bass"
+    - item['changed'] == "true"
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
+  
 
-    - name: Build and install pkgtop.
-      become: true
-      become_user: merlin
-      shell: "fish -lc 'go get ./...; and go build src/pkgtop.go && mv pkgtop /home/merlin/gocode/bin'"
-      args:
-        chdir: /home/merlin/git/pkgtop
-      when:
-        - item['item']['dest'] == "pkgtop"
-        - item['changed'] == "true"
-      loop:
-        "{{ gitclone.results }}"
-      loop_control:
-        loop_var: item
+- name: Build and install pkgtop.
+  become: true
+  become_user: "{{ user }}"
+  shell: "fish -lc 'go get ./...; and go build src/pkgtop.go && mv pkgtop /home/{{ user }}/gocode/bin'"
+  args:
+    chdir: "/home/{{ user }}/git/pkgtop"
+  when:
+    - item['item']['dest'] == "pkgtop"
+    - item['changed'] == "true"
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
 
-    - name: Build and install go-tools.
-      become: true
-      become_user: merlin
-      shell: "fish -lc 'for ii in (ls); echo $ii; pushd $ii; go get -u; popd; end'"
-      args:
-        chdir: /home/merlin/git/go-tools/cmd
-      when:
-        - item['item']['dest'] == "go-tools"
-        - item['changed'] == "true"
-      loop:
-        "{{ gitclone.results }}"
-      loop_control:
-        loop_var: item
+- name: Build and install go-tools.
+  become: true
+  become_user: "{{ user }}"
+  shell: "fish -lc 'for ii in (ls); echo $ii; pushd $ii; go get -u; popd; end'"
+  args:
+    chdir: "/home/{{ user }}/git/go-tools/cmd"
+  when:
+    - item['item']['dest'] == "go-tools"
+    - item['changed'] == "true"
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
 
-    - name: Clean go-tools repo.
-      become: true
-      become_user: merlin
-      shell: git restore go.mod go.sum
-      args:
-        chdir: /home/merlin/git/go-tools/
+- name: Clean go-tools repo.
+  become: true
+  become_user: "{{ user }}"
+  shell: git restore go.mod go.sum
+  args:
+    chdir: /home/{{ user }}/git/go-tools/
 
-    - name: Setup fzf.
-      become: true
-      become_user: merlin
-      shell: "/home/merlin/git/fzf/install --all"
-      args:
-        chdir: /home/merlin/git/fzf
-      when:
-        - item['item']['dest'] == "fzf"
-        - item['changed'] == "true"
-      loop:
-        "{{ gitclone.results }}"
-      loop_control:
-        loop_var: item
+- name: Setup fzf.
+  become: true
+  become_user: "{{ user }}"
+  shell: "/home/{{ user }}/git/fzf/install --all"
+  args:
+    chdir: /home/{{ user }}/git/fzf
+  when:
+    - item['item']['dest'] == "fzf"
+    - item['changed'] == "true"
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
 
-    - name: Setup LS_COLORS.
-      file:
-        path: /home/merlin/.dircolors
-        src: /home/merlin/git/LS_COLORS/LS_COLORS
-        state: link
-        owner: merlin
-        group: merlin
+- name: Setup LS_COLORS.
+  file:
+    path: /home/{{ user }}/.dircolors
+    src: /home/{{ user }}/git/LS_COLORS/LS_COLORS
+    state: link
+    owner: "{{ user }}"
+    group: "{{ user }}"
 
-    - name: Setup GRC.
-      shell: "/home/merlin/git/grc/install.sh"
-      args:
-        chdir: /home/merlin/git/grc
-      when:
-        - item['item']['dest'] == "grc"
-        - item['changed'] == "true"
-      loop:
-        "{{ gitclone.results }}"
-      loop_control:
-        loop_var: item
+- name: Setup GRC.
+  shell: "/home/{{ user }}/git/grc/install.sh"
+  args:
+    chdir: "/home/{{ user }}/git/grc"
+  when:
+    - item['item']['dest'] == "grc"
+    - item['changed'] == "true"
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
 
-    - name: Install hr.
-      shell: "make install"
-      args:
-        chdir: /home/merlin/git/hr
-      when:
-        - item['item']['dest'] == "hr"
-        - item['changed'] == "true"
-      loop:
-        "{{ gitclone.results }}"
-      loop_control:
-        loop_var: item
+- name: Install hr.
+  shell: "make install"
+  args:
+    chdir: "/home/{{ user }}/git/hr"
+  when:
+    - item['item']['dest'] == "hr"
+    - item['changed'] == "true"
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
 
-    - name: Build and install tig.
-      become: true
-      become_user: merlin
-      shell: "make; make install; make install-doc; make install-release-doc"
-      args:
-        chdir: /home/merlin/git/tig
-      when:
-        - item['item']['dest'] == "tig"
-        - item['changed'] == "true"
-      loop:
-        "{{ gitclone.results }}"
-      loop_control:
-        loop_var: item
+- name: Build and install tig.
+  become: true
+  become_user: "{{ user }}"
+  shell: "make; make install; make install-doc; make install-release-doc"
+  args:
+    chdir: "/home/{{ user }}/git/tig"
+  when:
+    - item['item']['dest'] == "tig"
+    - item['changed'] == "true"
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
 
-    - name: Build and install jl.
-      become: true
-      become_user: merlin
-      shell: stack install
-      args:
-        chdir: "/home/merlin/git/jl"
-      when:
-        - item['item']['dest'] == "jl"
-        - item['changed'] == "true"
-      loop:
-        "{{ gitclone.results }}"
-      loop_control:
-        loop_var: item
+- name: Build and install jl.
+  become: true
+  become_user: "{{ user }}"
+  shell: stack install
+  args:
+    chdir: "/home/{{ user }}/git/jl"
+  when:
+    - item['item']['dest'] == "jl"
+    - item['changed'] == "true"
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
 
-    - name: Update golang godoc tool.
-      shell:
-        cmd: "go get -u golang.org/x/tools/cmd/godoc"
+- name: Update golang godoc tool.
+  shell:
+    cmd: "go get -u golang.org/x/tools/cmd/godoc"
 
-    - name: Install golang user tools and libraries.
-      become: true
-      become_user: merlin
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: "go get -u {{ item }}"
-      loop:
-        - github.com/anacrolix/missinggo
-        - github.com/bradfitz/iter
-        - github.com/google/btree
-        - github.com/kbrgl/fu
-        - github.com/kisielk/errcheck
-        - github.com/mdempsky/unconvert
-        - github.com/motemen/gore
-        - github.com/nsf/gocode
-        - github.com/peco/peco/cmd/peco
-        - github.com/rogpeppe/godef
-        - github.com/ryszard/goskiplist/skiplist
-        - github.com/tokozedg/sman
-        - golang.org/x/lint/golint
-        - golang.org/x/tools/cmd/cover
-        - golang.org/x/tools/cmd/gorename
-        - golang.org/x/tools/cmd/guru
+- name: Install golang user tools and libraries.
+  become: true
+  become_user: "{{ user }}"
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "go get -u {{ item }}"
+  loop:
+    - github.com/anacrolix/missinggo
+    - github.com/bradfitz/iter
+    - github.com/google/btree
+    - github.com/kbrgl/fu
+    - github.com/kisielk/errcheck
+    - github.com/mdempsky/unconvert
+    - github.com/motemen/gore
+    - github.com/nsf/gocode
+    - github.com/peco/peco/cmd/peco
+    - github.com/rogpeppe/godef
+    - github.com/ryszard/goskiplist/skiplist
+    - github.com/tokozedg/sman
+    - golang.org/x/lint/golint
+    - golang.org/x/tools/cmd/cover
+    - golang.org/x/tools/cmd/gorename
+    - golang.org/x/tools/cmd/guru
 
-    - name: Create tmp dir.
-      file:
-        path: "/home/merlin/tmp"
-        state: directory
-        owner: merlin
-        group: merlin
+- name: Create tmp dir.
+  file:
+    path: "/home/{{ user }}/tmp"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
 
-    - name: Get golangcli-lint install script.
-      get_url:
-        url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh "
-        mode: u=rwx
-        owner: merlin
-        dest: "/home/merlin/tmp/golangcli-lint.sh"
-        force: true
+- name: Get golangcli-lint install script.
+  get_url:
+    url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh "
+    mode: u=rwx
+    owner: "{{ user }}"
+    dest: "/home/{{ user }}/tmp/golangcli-lint.sh"
+    force: true
 
-    - name: Install golangci-lint.
-      become: true
-      become_user: merlin
-      register: golangcli
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: "sh ~/tmp/golangcli-lint.sh -b $(go env GOPATH)/bin"
+- name: Install golangci-lint.
+  become: true
+  become_user: "{{ user }}"
+  register: golangcli
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "sh ~/tmp/golangcli-lint.sh -b $(go env GOPATH)/bin"
 
-    - name: Install library packages for rust support commands.
-      dnf:
-        state: latest
-        name:
-          - libgit2-devel
-          - libssh2-devel
-          - openssl-devel
-          - openssl-libs
-          - pkgconf-pkg-config
+- name: Install library packages for rust support commands.
+  dnf:
+    state: latest
+    name:
+      - libgit2-devel
+      - libssh2-devel
+      - openssl-devel
+      - openssl-libs
+      - pkgconf-pkg-config
 
-    - name: Ensure packaged rust is _not_ present.
-      dnf:
-        name:
-          - rust
-          - rust-doc
-          - rust-lldb
-          - rust-src
-          - rust-std-static
-        state: absent
+- name: Ensure packaged rust is _not_ present.
+  dnf:
+    name:
+      - rust
+      - rust-doc
+      - rust-lldb
+      - rust-src
+      - rust-std-static
+    state: absent
 
-    - name: Updating rustup.
-      become: true
-      become_user: merlin
-      ignore_errors: true
-      register: rustup
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: "/home/merlin/.cargo/bin/rustup update"
+- name: Updating rustup.
+  become: true
+  become_user: "{{ user }}"
+  ignore_errors: true
+  register: rustup
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "/home/{{ user }}/.cargo/bin/rustup update"
 
+- debug:
+    var: rustup
 
-    - name: Get rustup install script.
-      when: 'rustup.failed is defined and rustup.failed'
-      get_url:
-        url: "https://sh.rustup.rs"
-        mode: u=rwx
-        owner: merlin
-        dest: "/home/merlin/tmp/rustup.sh"
-        force: true
+- name: Get rustup install script.
+  when: 'rustup.failed is defined and rustup.failed'
+  get_url:
+    url: "https://sh.rustup.rs"
+    mode: u=rwx
+    owner: "{{ user }}"
+    dest: "/home/{{ user }}/tmp/rustup.sh"
+    force: true
 
-    - name: Install rustup.
-      become: true
-      become_user: merlin
-      when: 'rustup.failed is defined and rustup.failed'
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: "sh ~/tmp/rustup.sh -y"
+- name: Install rustup.
+  become: true
+  become_user: "{{ user }}"
+  when: 'rustup.failed is defined and rustup.failed'
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "sh ~/tmp/rustup.sh -y"
 
-    - name: Updating Cargo Update
-      become: true
-      become_user: merlin
-      ignore_errors: true
-      register: cargo_update
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: "/home/merlin/.cargo/bin/cargo install-update cargo-update"
+- name: Updating Cargo Update
+  become: true
+  become_user: "{{ user }}"
+  ignore_errors: true
+  register: cargo_update
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "/home/{{ user }}/.cargo/bin/cargo install-update cargo-update"
 
-    - name: Install Cargo Update.
-      become: true
-      become_user: merlin
-      when: '"no such subcommand" in cargo_update.stderr'
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: "/home/merlin/.cargo/bin/cargo install --force cargo-update"
+- name: Install Cargo Update.
+  become: true
+  become_user: "{{ user }}"
+  when: '"no such subcommand" in cargo_update.stderr'
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "/home/{{ user }}/.cargo/bin/cargo install --force cargo-update"
 
-    - name: Install cargo (rust) user tools.
-      become: true
-      become_user: merlin
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: "/home/merlin/.cargo/bin/cargo install-update {{ item }}"
-      loop:
-        - cargo-check
-        - cargo-edit
-        - cargo-graph
-        - cargo-script
-        - cargo-watch
-        - flamegraph
-        - kickstart
-        - ptags
-        - ripgrep
-        - xsv
-        - -a   # update all packages.
+- name: Install cargo (rust) user tools.
+  become: true
+  become_user: "{{ user }}"
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "/home/{{ user }}/.cargo/bin/cargo install-update {{ item }}"
+  loop:
+    - cargo-check
+    - cargo-edit
+    - cargo-graph
+    - cargo-script
+    - cargo-watch
+    - flamegraph
+    - kickstart
+    - ptags
+    - ripgrep
+    - xsv
+    - -a   # update all packages.
 
-    # Broken at present, because clippy doesn't have a nightly build for linux.
-    # - name: Setup nightly build rustc toolchain.
-    #   become: true
-    #   become_user: merlin
-    #   args:
-    #    chdir: /home/merlin
-    #   shell:
-    #     cmd: "/home/merlin/.cargo/bin/rustup toolchain add nightly"
+# Broken at present, because clippy doesn't have a nightly build for linux.
+# - name: Setup nightly build rustc toolchain.
+#   become: true
+#   become_user: "{{ user }}"
+#   args:
+#    chdir: "/home/{{ user }}"
+#   shell:
+#     cmd: "/home/{{ user }}/.cargo/bin/rustup toolchain add nightly"
 
-    # - name: Install racer (rust tool that needs nightly)
-    #   become: true
-    #   become_user: merlin
-    #   args:
-    #     chdir: /home/merlin
-    #   shell:
-    #     cmd: "cargo install-update +nightly racer"
+# - name: Install racer (rust tool that needs nightly)
+#   become: true
+#   become_user: "{{ user }}"
+#   args:
+#     chdir: "/home/{{ user }}"
+#   shell:
+#     cmd: "cargo install-update +nightly racer"
 
-    - name: Install lefortovo.
-      become: true
-      become_user: merlin
-      ignore_errors: true
-      # when: "gitclone.stdout"
-      shell: "/home/merlin/.cargo/bin/cargo install --force"
-      args:
-        chdir: /home/merlin/git/lefortovo
+- name: Install lefortovo.
+  become: true
+  become_user: "{{ user }}"
+  ignore_errors: true
+  # when: "gitclone.stdout"
+  shell: "/home/{{ user }}/.cargo/bin/cargo install --force"
+  args:
+    chdir: "/home/{{ user }}/git/lefortovo"
 
-    - name: Install library packages for Stack utilities.
-      dnf:
-        state: latest
-        name:
-          - ncurses-devel
-          - ncurses-libs
-          - ncurses-compat-libs
+- name: Install library packages for Stack utilities.
+  dnf:
+    state: latest
+    name:
+      - ncurses-devel
+      - ncurses-libs
+      - ncurses-compat-libs
 
-    - name: Install stack (haskell) user tools.
-      become: true
-      become_user: merlin
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: "stack install {{ item }}"
-      loop:
-        - bench
-        - cpphs
-        - criterion
-        - dhall
-        - ghc-prof-flamegraph
-        - ghcid
-        - happy
-        - hasktags
-        - hlint
-        - hoogle
-        - intero
-        - present
-        - ShellCheck
-        - stylish-haskell
-        - turtle
-        - weeder
-        # - ghc-mod # not building?
-        # - idris
-        # - pandoc
-        # - threadscope
+- name: Install stack (haskell) user tools.
+  become: true
+  become_user: "{{ user }}"
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "stack install {{ item }}"
+  loop:
+    - bench
+    - cpphs
+    - criterion
+    - dhall
+    - ghc-prof-flamegraph
+    - ghcid
+    - happy
+    - hasktags
+    - hlint
+    - hoogle
+    - intero
+    - pandoc
+    - present
+    - stylish-haskell
+    - turtle
+    - weeder
 
-    - name: Get ELPA GPG key.
-      become: true
-      become_user: merlin
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: 'gpg --homedir ~/.emacs.d/elpa/gnupg --receive-keys 066DAFCB81E42C40'
+- name: Install stack (haskell) tools that need a particular resolver.
+  become: true
+  become_user: "{{ user }}"
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "stack install {{ item.name }} --resolver {{ item.resolver }}"
+  loop:
+    - { name: 'ShellCheck', resolver: 'lts-14.10' }
+    # - ghc-mod # not building?
+    # - idris
+    # - threadscope
 
-    - name: Install/Update Emacs Packages
-      become: true
-      become_user: merlin
-      args:
-        chdir: /home/merlin
-      shell:
-        cmd: 'emacs --batch -l ~/.emacs.d/init.el --eval="(configuration-layer/update-packages t)"'
+- name: Get ELPA GPG key.
+  become: true
+  become_user: "{{ user }}"
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: 'gpg --homedir ~/.emacs.d/elpa/gnupg --receive-keys 066DAFCB81E42C40'
 
-    - name: Update packages.
-      dnf:
-        name=*
-        state=latest
+- name: Install/Update Emacs Packages
+  become: true
+  become_user: "{{ user }}"
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: 'emacs --batch -l ~/.emacs.d/init.el --eval="(configuration-layer/update-packages t)"'
+
+- name: Update packages.
+  dnf:
+    name: '*'
+    state: latest
