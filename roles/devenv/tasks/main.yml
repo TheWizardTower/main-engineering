@@ -655,12 +655,12 @@
     - ghc-prof-flamegraph
     - ghcid
     - happy
-    - hasktags
+    # - hasktags
     - hlint
     - hoogle
-    - intero
+    # - intero
     - pandoc
-    - present
+    # - present
     - stylish-haskell
     - turtle
     - weeder
