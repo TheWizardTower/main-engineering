@@ -34,11 +34,13 @@
 
 - name: Install packaged desktop tools.
   dnf:
+    state: latest
     name:
       - GraphicsMagick
       - ImageMagick
       - NetworkManager-tui
-      - VirtualBox-5.1 # Needs the virtualbox repo.
+      - RemoteBox
+      - VirtualBox-6.1 # Needs the virtualbox repo.
       - Xdialog
       - amarok-utils
       - brave-browser
@@ -46,7 +48,6 @@
       - digikam
       - dkms
       - dmenu
-      - docker-io
       - dzen2
       - exfat-utils
       - firefox
@@ -65,10 +66,13 @@
       - kernel-headers
       - levien-inconsolata-fonts
       - libXpm-devel
+      - libvirt-daemon-driver-vbox
       - libxml++-devel
       - libxml++30-devel
       - libxml-devel
       - libxml2-static
+      - moby-engine
+      - moc
       - obs-studio
       - paman
       - paprefs
@@ -81,7 +85,6 @@
       - redshift
       - seamonkey
       - sl
-      - sysstat
       - tigervnc
       - ufraw
       - unetbootin
@@ -92,7 +95,6 @@
       - xmonad
       - xsel
       - yakuake
-    state: latest
 
 - name: Checkout the fonts repo.
   become: true

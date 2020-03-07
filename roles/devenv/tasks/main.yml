@@ -171,6 +171,7 @@
       - tmux
       - tree
       - vim-enhanced
+      - vnstat
       - zsh
 
 - name: Create ~/local/bin
