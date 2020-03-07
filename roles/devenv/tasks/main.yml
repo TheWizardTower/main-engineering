@@ -13,6 +13,28 @@
   register: rpm_release
   changed_when: false
 
+- name: Import mono keys
+  shell: "rpmkeys --import 'http://pool.sks-keyservers.net/pks/lookup?op=get&search=0x3fa7e0328081bff6a14da29aa6a19b38d3d831ef'"
+
+- name: Set up mono repo.
+  get_url:
+    url: "https://download.mono-project.com/repo/centos8-stable.repo"
+    dest: "/etc/yum.repos.d/mono-centos8-stable.repo"
+
+- name: Import DotNet rpm key.
+  shell: "rpm --import https://packages.microsoft.com/keys/microsoft.asc"
+
+- name: Set up DotNet repo
+  get_url:
+    url: "https://packages.microsoft.com/config/fedora/31/prod.repo"
+    dest: "/etc/yum.repos.d/microsoft-prod.repo"
+
+- name: Install rpmsphere repo (Required for fsharp)
+  dnf:
+    state: latest
+    name:
+      - "https://raw.githubusercontent.com/rpmsphere/noarch/master/r/rpmsphere-release-30-1.noarch.rpm"
+
 - name: Enable RPMFusion Free and Non-Free.
   dnf:
     state: latest
@@ -41,21 +63,76 @@
     dest: "/usr/bin/systemctl"
     mode: +x
 
-- name: Install packaged development/benchmarking/introspection tools.
+- name: Install tools to help me study compilers!
+  dnf:
+    state: latest
+    name:
+      - bison
+      - byacc
+      - flex
+
+- name: Install benchmarking tools.
   dnf:
     state: latest
     name:
       # - ntop
-      - PyYAML
-      - ack
-      - asciidoc
       - atop
       - blktrace
+      - ethtool
+      - fatrace
+      - fio
+      - flamegraph
+      - hdparm
+      - hping3
+      - htop
+      - httpd-tools
+      - iftop
+      - iotop
+      - iperf
+      - lsof
+      - ltrace
+      - mtr
+      - perf
+      - procps-ng
+      - psmisc
+      - strace
+      - sysbench
+      - sysstat
+      - systemtap
+      - tcpdump
+      - tiptop
+      - traceroute
+      - ttcp
+
+- name: Install compilers and libraries.
+  dnf:
+    state: latest
+    name:
+      - PyYAML # Used for dotbot in the abrazo repo.
+      - asciidoc
       - boost-static
       - cabal-rpm
       - clang
       - clojure
       - cmake
+      - dotnet-sdk-3.1
+      - fsharp
+      - gcc-c++
+      - gdb
+      - golang
+      - mono-complete
+      - net-tools
+      - nload
+      - perl-core
+      - python
+      - stack
+      - ruby-devel
+
+- name: Install packaged development tools.
+  dnf:
+    state: latest
+    name:
+      - ack
       - colordiff
       - colorgcc
       - cowsay
@@ -63,70 +140,36 @@
       - dash
       - docker
       - emacs
-      - ethtool
-      - fatrace
-      - fio
       - fish
-      - flamegraph
       - fortune-mod
-      - gcc-c++
-      - gdb
       - gem
       - git
       - git-extras
       - git-svn
-      - golang
-      - hdparm
       - hlint
-      - hping3
-      - htop
-      - httpd-tools
       - hub
-      - iftop
-      - iotop
-      - iperf
       - iproute
       - irssi
       - jq
       - lldpad
-      - lsof
-      - ltrace
       - lynx
       - mc
       - mercurial
       - most
-      - mtr
-      - net-tools
-      - nload
       - npm
       - numactl
       - pcp-system-tools
-      - perf
-      - perl-core
       - perl-criticism
       - perltidy
       - php-pear
-      - procps-ng
-      - psmisc
       - pv
-      - python
       - python3-pip
       - rpmlint
-      - ruby-devel
       - screen
-      - stack
-      - strace
       - subversion
-      - sysbench
-      - sysstat
-      - systemtap
-      - tcpdump
       - the_silver_searcher
-      - tiptop
       - tmux
-      - traceroute
       - tree
-      - ttcp
       - vim-enhanced
       - zsh
 
