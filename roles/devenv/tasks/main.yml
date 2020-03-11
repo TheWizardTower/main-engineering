@@ -283,6 +283,7 @@
     name:
       - powerline
       - tmux-powerline
+      - vim-powerline
     state: absent
 
 - name: Install pip3 packages.
