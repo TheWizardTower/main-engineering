@@ -59,6 +59,7 @@
       - google-chrome-stable # Needs the google chrome repo.
       - gparted
       - gpodder
+      - gxmms2
       - imlib2
       - imlib2-devel
       - kdenlive
@@ -93,6 +94,10 @@
       - wireless-tools-devel
       - xcompmgr
       - xmonad
+      - xmms2
+      - xmms2-freeworld
+      - xmms2-nonfree
+      - xmms2-normalize
       - xsel
       - yakuake
 
