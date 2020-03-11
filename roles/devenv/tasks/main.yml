@@ -179,11 +179,11 @@
   dnf:
     state: latest
     name:
-      - kubernetes
       - NetworkManager-tui
+      - docker
+      - kubernetes
       - libvirt-daemon-kvm
       - qemu-kvm
-      - docker
 
 - name: Create ~/local/bin
   file:
