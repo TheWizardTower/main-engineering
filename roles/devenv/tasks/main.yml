@@ -183,6 +183,8 @@
       - docker
       - kubernetes
       - libvirt-daemon-kvm
+      - origin
+      - origin-web-console
       - qemu-kvm
 
 - name: Create ~/local/bin
