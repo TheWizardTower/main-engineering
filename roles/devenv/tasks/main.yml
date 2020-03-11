@@ -553,6 +553,7 @@
     - github.com/peco/peco/cmd/peco
     - github.com/rogpeppe/godef
     - github.com/ryszard/goskiplist/skiplist
+    - github.com/shurcooL/markdownfmt
     - github.com/tokozedg/sman
     - golang.org/x/lint/golint
     - golang.org/x/tools/cmd/cover
