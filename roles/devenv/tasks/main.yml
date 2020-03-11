@@ -23,6 +23,8 @@
 
 - name: Import DotNet rpm key.
   shell: "rpm --import https://packages.microsoft.com/keys/microsoft.asc"
+  args:
+    warn: false # Not doable inside ansible, AFAIK.
 
 - name: Set up DotNet repo
   get_url:
