@@ -19,6 +19,8 @@
 
 - name: Install Brave repo.
   shell: 'dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/'
+  args:
+    warn: false # config-manager isn't in Ansible's dnf module.
 
 - name: Import brave package key.
   shell: 'rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc'
