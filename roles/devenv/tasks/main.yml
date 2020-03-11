@@ -291,6 +291,7 @@
     state: latest
     executable: pip3
     name:
+      - ansible
       - ansible-lint
       - black
       - flake8
