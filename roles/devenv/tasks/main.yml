@@ -695,7 +695,7 @@
   become_user: "{{ user }}"
   ignore_errors: true
   # when: "gitclone.stdout"
-  shell: "/home/{{ user }}/.cargo/bin/cargo install --force"
+  shell: "/home/{{ user }}/.cargo/bin/cargo install --path . --force"
   args:
     chdir: "/home/{{ user }}/git/lefortovo"
 
