@@ -26,9 +26,10 @@
   shell: 'rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc'
 
 - name: Create a plasma configuration directory.
-  become: true
-  become_user: "{{ user }}"
-  shell: '/bin/mkdir -p /home/{{ user }}/.config/plasma-workspace/env'
+  file:
+    path: "/home/{{ user }}/.config/plasma-workspace/env"
+    state: directory
+    owner: "{{ user }}"
 
 - name: Create a file to set KDEs default window manager to xmonad.
   copy:
