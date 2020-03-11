@@ -699,3 +699,15 @@
   dnf:
     name: '*'
     state: latest
+
+- name: Install programs specific to a bare-metal Fedora install.
+  when: "'Microsoft' not in ansible_facts.kernel"
+  dnf:
+    state: latest
+    name:
+      - kubernetes
+      - NetworkManager-tui
+      - libvirt-daemon-kvm
+      - qemu-kvm
+      - docker
+
