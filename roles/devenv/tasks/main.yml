@@ -146,7 +146,6 @@
       - git
       - git-extras
       - git-svn
-      - hlint
       - hub
       - iproute
       - irssi
