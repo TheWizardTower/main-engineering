@@ -173,6 +173,14 @@
       - vnstat
       - zsh
 
+
+- name: Ensure that Kubernetes is not installed.
+  when: "'Microsoft' not in ansible_facts.kernel"
+  dnf:
+    state: absent
+    name:
+      - kubernetes # OpenShift and k8s can't co-exist.
+
 - name: Install programs specific to a bare-metal Fedora install.
   when: "'Microsoft' not in ansible_facts.kernel"
   dnf:
@@ -180,7 +188,6 @@
     name:
       - NetworkManager-tui
       - docker
-      - kubernetes
       - libvirt-daemon-kvm
       - origin
       - origin-web-console
