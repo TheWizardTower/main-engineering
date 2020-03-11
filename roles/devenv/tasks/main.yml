@@ -706,21 +706,30 @@
   shell:
     cmd: "stack install {{ item }}"
   loop:
+    - aeson
     - bench
+    - bytestring
+    - containers
     - cpphs
     - criterion
     - dhall
     - ghc-prof-flamegraph
     - ghcid
+    - ghcide
     - happy
-    # - hasktags
+    - hasktags
     - hlint
     - hoogle
-    # - intero
+    - lens
+    - lens-aeson
+    - megaparsec
+    - mtl
+    - optparse-applicative
     - pandoc
-    # - present
     - stylish-haskell
+    - text
     - turtle
+    - QuickCheck
     - weeder
 
 - name: Install stack (haskell) tools that need a particular resolver.
@@ -732,9 +741,8 @@
     cmd: "stack install {{ item.name }} --resolver {{ item.resolver }}"
   loop:
     - { name: 'ShellCheck', resolver: 'lts-14.10' }
-    # - ghc-mod # not building?
-    # - idris
-    # - threadscope
+    - { name: 'present', resolver: 'lts-14.10' }
+    - { name: 'threadscope', resolver: 'lts-14.10' }
 
 - name: Get ELPA GPG key.
   become: true
