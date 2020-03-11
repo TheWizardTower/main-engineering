@@ -75,7 +75,6 @@
   dnf:
     state: latest
     name:
-      # - ntop
       - atop
       - blktrace
       - ethtool
