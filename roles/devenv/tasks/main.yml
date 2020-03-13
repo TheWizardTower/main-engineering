@@ -322,9 +322,9 @@
   become: true
   become_user: "{{ user }}"
   git:
-    repo: https://github.com/TheWizardTower/abrazo.git
-    dest: "/home/{{ user }}/abrazo"
     accept_hostkey: yes
+    dest: "/home/{{ user }}/abrazo"
+    repo: https://github.com/TheWizardTower/abrazo.git
     update: no
 
 - name: Setup abrazo dotfiles.
