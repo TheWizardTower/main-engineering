@@ -710,10 +710,9 @@
       - ncurses-compat-libs
 
 - name: Update and upgrade stack.
-  shell:
-    cmd: "stack update && stack upgrade"
+  ignore_errors: true
   register: stack_output
-  ignore_error: true
+  shell: "stack update && stack upgrade"
 
 - name: Install stack if it isn't found.
   when: stack_output.failed and stack_output.failed
