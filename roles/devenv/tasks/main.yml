@@ -337,10 +337,10 @@
 - name: Checkout a copy of Spacemacs.
   become: true
   become_user: "{{ user }}"
-  git: 
-    repo: "https://github.com/syl20bnr/spacemacs.git"
-    dest: "/home/{{ user }}/.emacs.d"
+  git:
     accept_hostkey: true
+    dest: "/home/{{ user }}/.emacs.d"
+    repo: "https://github.com/syl20bnr/spacemacs.git"
     update: yes
 
 - name: Checkout a copy of Tmux Plugin Manager
