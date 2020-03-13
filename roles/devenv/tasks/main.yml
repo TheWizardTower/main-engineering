@@ -289,11 +289,11 @@
 
 - name: Ensure packaged powerline is _not_ present.
   dnf:
+    state: absent
     name:
       - powerline
       - tmux-powerline
       - vim-powerline
-    state: absent
 
 - name: Install pip3 packages.
   pip:
