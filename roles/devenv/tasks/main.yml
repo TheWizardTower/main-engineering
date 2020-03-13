@@ -395,7 +395,7 @@
     - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
     - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
     - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
-    - { src: 'https://github.com/orhun/pkgtop.git', dest: 'pkgtop' } 
+    - { src: 'https://github.com/orhun/pkgtop.git', dest: 'pkgtop' }
     - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
     - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
     - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
