@@ -717,6 +717,7 @@
   shell:
     cmd: "stack install {{ item }}"
   loop:
+    - QuickCheck
     - aeson
     - bench
     - bytestring
