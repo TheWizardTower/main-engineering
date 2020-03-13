@@ -50,7 +50,6 @@
     path: "/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:petersen:stack.repo"
   register: stack_copr
 
-
 - name: Enable the Haskell Stack COPR repo.
   when: stack_copr.stat.exists is defined and not stack_copr.stat.exists
   shell:
