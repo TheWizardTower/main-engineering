@@ -596,13 +596,13 @@
 
 - name: Ensure packaged rust is _not_ present.
   dnf:
+    state: absent
     name:
       - rust
       - rust-doc
       - rust-lldb
       - rust-src
       - rust-std-static
-    state: absent
 
 - name: Updating rustup.
   become: true
