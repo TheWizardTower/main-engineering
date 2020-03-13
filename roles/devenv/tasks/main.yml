@@ -403,8 +403,6 @@
     - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
     - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
-- debug:
-    var: gitclone
 
 - name: Setup bass.
   become: true
