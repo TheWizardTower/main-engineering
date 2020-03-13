@@ -367,9 +367,9 @@
   # github.com is crashing rn.
   ignore_errors: true
   git:
-    repo: "{{ item.src }}"
     accept_hostkey: true
     dest: "/home/{{ user }}/git/{{ item.dest }}"
+    repo: "{{ item.src }}"
     update: true
   loop:
     - { src: 'https://github.com/Airblader/xcb-util-xrm.git', dest: 'xcb-util-xrm' }
