@@ -44,19 +44,6 @@
       - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_release.stdout }}.noarch.rpm"
       - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_release.stdout }}.noarch.rpm"
 
-- name: Check for COPR configuration file.
-  changed_when: false
-  stat:
-    path: "/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:petersen:stack.repo"
-  register: stack_copr
-
-- name: Enable the Haskell Stack COPR repo.
-  when: stack_copr.stat.exists is defined and not stack_copr.stat.exists
-  shell:
-    cmd: 'dnf copr enable petersen/stack -y'
-  args:
-    warn: false
-
 - name: Copy a functional version of systemctl if we're on WSL.
   when: "'Microsoft' in ansible_facts.kernel"
   get_url:
@@ -126,7 +113,6 @@
       - nload
       - perl-core
       - python
-      - stack
       - ruby-devel
 
 - name: Install packaged development tools.
@@ -722,6 +708,37 @@
       - ncurses-devel
       - ncurses-libs
       - ncurses-compat-libs
+
+- name: Update and upgrade stack.
+  shell:
+    cmd: "stack update && stack upgrade"
+  register: stack_output
+  ignore_error: true
+
+- name: Install stack if it isn't found.
+  when: stack_output.failed and stack_output.failed
+  shell:
+    cmd: "curl -sSL https://get.haskellstack.org/ | sh"
+
+- name: Try to find jl.
+  ignore_errors: true
+  register: jl_output
+  shell: "jl --help"
+
+- name: Build and install jl.
+  args:
+    chdir: "/home/{{ user }}/git/jl"
+  become: true
+  become_user: "{{ user }}"
+  shell: stack install
+  when:
+    (item['item'] == "jl" and
+    item['changed'] == "true") or
+    (jl_output.failed is defined and jl_output.failed)
+  loop:
+    "{{ gitclone.results }}"
+  loop_control:
+    loop_var: item
 
 - name: Install stack (haskell) user tools.
   become: true
