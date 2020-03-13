@@ -55,8 +55,8 @@
   when: stack_copr.stat.exists is defined and not stack_copr.stat.exists
   shell:
     cmd: 'dnf copr enable petersen/stack -y'
-    args:
-      warn: false
+  args:
+    warn: false
 
 - name: Copy a functional version of systemctl if we're on WSL.
   when: "'Microsoft' in ansible_facts.kernel"
