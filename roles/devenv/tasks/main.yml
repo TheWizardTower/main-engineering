@@ -403,6 +403,10 @@
     - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
     - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
+- name: Try to find bass!
+  shell: "bass ls"
+  ignore_errors: true
+  register: bass_output
 
 - name: Setup bass.
   become: true
@@ -411,13 +415,18 @@
   args:
     chdir: "/home/{{ user }}/git/bass"
   when:
-    - item['item']['dest'] == "bass"
-    - item['changed'] == "true"
+    (item['item'] == "bass" and
+    item['changed'] == "true") or
+    (bass_output is defined and bass_output.failed)
   loop:
     "{{ gitclone.results }}"
   loop_control:
     loop_var: item
-  
+
+- name: Try to find pkgtop!
+  shell: "pkgtop -v"
+  ignore_errors: true
+  register: pkgtop_output
 
 - name: Build and install pkgtop.
   become: true
@@ -426,8 +435,9 @@
   args:
     chdir: "/home/{{ user }}/git/pkgtop"
   when:
-    - item['item']['dest'] == "pkgtop"
-    - item['changed'] == "true"
+    (item['item'] == "pkgtop" and
+    item['changed'] == "true") or
+    (pkgtop_output.failed is defined and pkgtop_output.failed)
   loop:
     "{{ gitclone.results }}"
   loop_control:
@@ -440,8 +450,8 @@
   args:
     chdir: "/home/{{ user }}/git/go-tools/cmd"
   when:
-    - item['item']['dest'] == "go-tools"
-    - item['changed'] == "true"
+    (item['item'] == "go-tools" and
+     item['changed'] == "true")
   loop:
     "{{ gitclone.results }}"
   loop_control:
@@ -454,15 +464,21 @@
   args:
     chdir: /home/{{ user }}/git/go-tools/
 
+- name: Try to find fzf!
+  ignore_errors: true
+  register: fzf_output
+  shell: "fzf --help"
+
 - name: Setup fzf.
+  args:
+    chdir: /home/{{ user }}/git/fzf
   become: true
   become_user: "{{ user }}"
   shell: "/home/{{ user }}/git/fzf/install --all"
-  args:
-    chdir: /home/{{ user }}/git/fzf
   when:
-    - item['item']['dest'] == "fzf"
-    - item['changed'] == "true"
+    (item['item'] == "fzf" and
+     item['changed'] == "true") or
+     (fzf_output.failed is defined and fzf_output.failed)
   loop:
     "{{ gitclone.results }}"
   loop_control:
@@ -476,53 +492,57 @@
     owner: "{{ user }}"
     group: "{{ user }}"
 
+- name: Try to find GRC.
+  shell: "grc"
+  ignore_errors: true
+  register: grc_output
+
 - name: Setup GRC.
-  shell: "/home/{{ user }}/git/grc/install.sh"
   args:
     chdir: "/home/{{ user }}/git/grc"
+  shell: "/home/{{ user }}/git/grc/install.sh"
   when:
-    - item['item']['dest'] == "grc"
-    - item['changed'] == "true"
+    (item['item'] == "grc" and
+     item['changed'] == "true") or
+     (grc_output.failed is defined and grc_output.failed)
   loop:
     "{{ gitclone.results }}"
   loop_control:
     loop_var: item
+
+- name: Try to find hr.
+  ignore_errors: true
+  register: hr_output
+  shell: "hr"
 
 - name: Install hr.
-  shell: "make install"
   args:
     chdir: "/home/{{ user }}/git/hr"
+  shell: "make install"
   when:
-    - item['item']['dest'] == "hr"
-    - item['changed'] == "true"
+    (item['item'] == "hr" and
+     item['changed'] == "true") or
+     (hr_output.failed is defined and hr_output.failed)
   loop:
     "{{ gitclone.results }}"
   loop_control:
     loop_var: item
 
+- name: Try to find tig.
+  ignore_errors: true
+  register: tig_output
+  shell: "tig --version"
+
 - name: Build and install tig.
+  args:
+    chdir: "/home/{{ user }}/git/tig"
   become: true
   become_user: "{{ user }}"
   shell: "make; make install; make install-doc; make install-release-doc"
-  args:
-    chdir: "/home/{{ user }}/git/tig"
   when:
-    - item['item']['dest'] == "tig"
-    - item['changed'] == "true"
-  loop:
-    "{{ gitclone.results }}"
-  loop_control:
-    loop_var: item
-
-- name: Build and install jl.
-  become: true
-  become_user: "{{ user }}"
-  shell: stack install
-  args:
-    chdir: "/home/{{ user }}/git/jl"
-  when:
-    - item['item']['dest'] == "jl"
-    - item['changed'] == "true"
+    (item['item'] == "tig" and
+    item['changed'] == "true") or
+    (tig_output.failed is defined and tig_output.failed)
   loop:
     "{{ gitclone.results }}"
   loop_control:
@@ -533,10 +553,10 @@
     cmd: "go get -u golang.org/x/tools/cmd/godoc"
 
 - name: Install golang user tools and libraries.
-  become: true
-  become_user: "{{ user }}"
   args:
     chdir: "/home/{{ user }}"
+  become: true
+  become_user: "{{ user }}"
   shell:
     cmd: "go get -u {{ item }}"
   loop:
@@ -560,18 +580,18 @@
 
 - name: Create tmp dir.
   file:
+    group: "{{ user }}"
+    owner: "{{ user }}"
     path: "/home/{{ user }}/tmp"
     state: directory
-    owner: "{{ user }}"
-    group: "{{ user }}"
 
 - name: Get golangcli-lint install script.
   get_url:
-    url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh "
-    mode: u=rwx
-    owner: "{{ user }}"
     dest: "/home/{{ user }}/tmp/golangcli-lint.sh"
     force: true
+    mode: u=rwx
+    owner: "{{ user }}"
+    url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh "
 
 - name: Install golangci-lint.
   become: true
@@ -603,60 +623,57 @@
       - rust-std-static
 
 - name: Updating rustup.
+  args:
+    chdir: "/home/{{ user }}"
   become: true
   become_user: "{{ user }}"
   ignore_errors: true
   register: rustup
-  args:
-    chdir: "/home/{{ user }}"
   shell:
     cmd: "/home/{{ user }}/.cargo/bin/rustup update"
-
-- debug:
-    var: rustup
 
 - name: Get rustup install script.
   when: 'rustup.failed is defined and rustup.failed'
   get_url:
-    url: "https://sh.rustup.rs"
-    mode: u=rwx
-    owner: "{{ user }}"
     dest: "/home/{{ user }}/tmp/rustup.sh"
     force: true
+    mode: u=rwx
+    owner: "{{ user }}"
+    url: "https://sh.rustup.rs"
 
 - name: Install rustup.
+  args:
+    chdir: "/home/{{ user }}"
   become: true
   become_user: "{{ user }}"
   when: 'rustup.failed is defined and rustup.failed'
-  args:
-    chdir: "/home/{{ user }}"
   shell:
     cmd: "sh ~/tmp/rustup.sh -y"
 
 - name: Updating Cargo Update
+  args:
+    chdir: "/home/{{ user }}"
   become: true
   become_user: "{{ user }}"
   ignore_errors: true
   register: cargo_update
-  args:
-    chdir: "/home/{{ user }}"
   shell:
     cmd: "/home/{{ user }}/.cargo/bin/cargo install-update cargo-update"
 
 - name: Install Cargo Update.
+  args:
+    chdir: "/home/{{ user }}"
   become: true
   become_user: "{{ user }}"
   when: '"no such subcommand" in cargo_update.stderr'
-  args:
-    chdir: "/home/{{ user }}"
   shell:
     cmd: "/home/{{ user }}/.cargo/bin/cargo install --force cargo-update"
 
 - name: Install cargo (rust) user tools.
-  become: true
-  become_user: "{{ user }}"
   args:
     chdir: "/home/{{ user }}"
+  become: true
+  become_user: "{{ user }}"
   shell:
     cmd: "/home/{{ user }}/.cargo/bin/cargo install-update {{ item }}"
   loop:
