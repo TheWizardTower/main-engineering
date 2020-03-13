@@ -740,7 +740,6 @@
     - stylish-haskell
     - text
     - turtle
-    - QuickCheck
     - weeder
 
 - name: Install stack (haskell) tools that need a particular resolver.
