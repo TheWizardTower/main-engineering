@@ -879,11 +879,28 @@
     - megaparsec
     - mtl
     - optparse-applicative
-    - pandoc
     - stylish-haskell
     - text
     - turtle
     - weeder
+
+# Pandoc takes >36 hours to build on my old-as-sin laptop, so don't build it there.
+- name: Install Pandonc, but only on my main dev rig.
+  when: ansible_facts['processor_cores'] != 2
+  become: true
+  become_user: "{{ user }}"
+  args:
+    chdir: "/home/{{ user }}"
+  shell:
+    cmd: "stack install {{ item }}"
+  loop:
+    - pandoc
+
+- name: Install Pandonc, but only on my main dev rig.
+  when: ansible_facts['processor_cores'] == 2
+  dnf:
+    name: pandoc
+    state: latest
 
 - name: Install stack (haskell) tools that need a particular resolver.
   become: true
