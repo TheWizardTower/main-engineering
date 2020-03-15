@@ -222,6 +222,7 @@
     state: absent
     name:
       - kubernetes # OpenShift and k8s can't co-exist.
+      - kubernetes-client
 
 - name: Install programs specific to a bare-metal Fedora install.
   when: "'Microsoft' not in ansible_facts.kernel"
