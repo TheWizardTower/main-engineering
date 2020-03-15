@@ -502,6 +502,8 @@
     - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
 
 - name: Try to find bass!
+  become: true
+  become_user: "{{ user }}"
   shell: "bass ls"
   ignore_errors: true
   register: bass_output
@@ -522,6 +524,8 @@
     loop_var: item
 
 - name: Try to find pkgtop!
+  become: true
+  become_user: "{{ user }}"
   shell: "pkgtop -v"
   ignore_errors: true
   register: pkgtop_output
@@ -563,6 +567,8 @@
     chdir: /home/{{ user }}/git/go-tools/
 
 - name: Try to find fzf!
+  become: true
+  become_user: "{{ user }}"
   ignore_errors: true
   register: fzf_output
   shell: "fzf --help"
@@ -591,6 +597,8 @@
     group: "{{ user }}"
 
 - name: Try to find GRC.
+  become: true
+  become_user: "{{ user }}"
   shell: "grc"
   ignore_errors: true
   register: grc_output
@@ -609,6 +617,8 @@
     loop_var: item
 
 - name: Try to find hr.
+  become: true
+  become_user: "{{ user }}"
   ignore_errors: true
   register: hr_output
   shell: "hr"
@@ -627,6 +637,8 @@
     loop_var: item
 
 - name: Try to find tig.
+  become: true
+  become_user: "{{ user }}"
   ignore_errors: true
   register: tig_output
   shell: "tig --version"
@@ -832,6 +844,8 @@
     cmd: "curl -sSL https://get.haskellstack.org/ | sh"
 
 - name: Try to find jl.
+  become: true
+  become_user: "{{ user }}"
   ignore_errors: true
   register: jl_output
   shell: "jl --help"
