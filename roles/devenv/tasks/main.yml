@@ -33,7 +33,14 @@
 - name: Import mono keys
   shell: "rpmkeys --import 'http://pool.sks-keyservers.net/pks/lookup?op=get&search=0x3fa7e0328081bff6a14da29aa6a19b38d3d831ef'"
 
+- name: Check if Mono repo is installed.
+  register: mono_repo
+  stat:
+    path: "/etc/yum.repos.d/microsoft-prod.repo"
+
 - name: Set up mono repo.
+  when: (mono_repo.exists is not defined or not
+         mono_repo.exists)
   get_url:
     url: "https://download.mono-project.com/repo/centos8-stable.repo"
     dest: "/etc/yum.repos.d/mono-centos8-stable.repo"
