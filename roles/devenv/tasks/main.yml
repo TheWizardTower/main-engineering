@@ -68,6 +68,29 @@
     dest: "/usr/bin/systemctl"
     mode: +x
 
+- name: Check if ANTLR is installed.
+  register: antlr
+  stat:
+    path: "/usr/local/lib/antlr-4.7.1-complete.jar"
+
+- name: Try to run ANTLR v4.
+  become: true
+  become_user: "{{ user }}"
+  register: antlr_exec
+  ignore_errors: true
+  shell:
+    cmd: "antlr4"
+
+- name: Get ANTLR V4.
+  when: (antlr.exists is not defined or not
+         antlr.exists) or
+         (antlr_exec.failed is defined or
+          antlr_exec.failed)
+  get_url:
+    url: "https://www.antlr.org/download/antlr-4.7.1-complete.jar"
+    dest: "/usr/local/lib/antlr-4.7.1-complete.jar"
+    mode: +x
+
 - name: Install tools to help me study compilers!
   dnf:
     state: latest
