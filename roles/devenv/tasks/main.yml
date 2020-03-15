@@ -79,12 +79,12 @@
   register: antlr_exec
   ignore_errors: true
   shell:
-    cmd: "antlr4"
+    cmd: "fish -c 'antlr4'"
 
 - name: Get ANTLR V4.
-  when: (antlr.exists is not defined or not
+  when: (antlr.exists is defined and not
          antlr.exists) or
-         (antlr_exec.failed is defined or
+         (antlr_exec.failed is defined and
           antlr_exec.failed)
   get_url:
     url: "https://www.antlr.org/download/antlr-4.7.1-complete.jar"
