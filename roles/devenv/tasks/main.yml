@@ -192,6 +192,8 @@
       - most
       - npm
       - numactl
+      - openssh
+      - openssh-server
       - pcp-system-tools
       - perl-criticism
       - perltidy
@@ -208,6 +210,11 @@
       - vnstat
       - zsh
 
+- name: Start and enable sshd.
+  systemd:
+    enabled: yes
+    name: sshd
+    state: started
 
 - name: Ensure that Kubernetes is not installed.
   when: "'Microsoft' not in ansible_facts.kernel"
