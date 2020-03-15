@@ -361,6 +361,70 @@
     repo: https://github.com/TheWizardTower/abrazo.git
     update: no
 
+- name: Check if stock bashrc exists.
+  register: bashrc_stat
+  ignore_errors: true
+  stat:
+    path: "/home/{{ user }}/.bashrc"
+
+- name: Move bashrc if it's not a link.
+  when: bashrc_stat.islink is not defined or not bashrc_stat.islink
+  shell:
+    cmd: "mv /home/{{ user }}/.bashrc /home/{{ user }}/.bashrc_stock"
+
+- name: Check if stack bash profile exists.
+  register: bash_prof_stat
+  ignore_errors: true
+  stat:
+    path: "/home/{{ user }}/.bash_profile "
+
+- name: Move bash_profile if it's not a link.
+  when: bash_prof_stat.islink is not defined or not bash_prof_stat.islink
+  shell:
+    cmd: "mv /home/{{ user }}/.bash_profile /home/{{ user }}/.bash_profile_stock"
+
+- name: Create abrazo dotfile symlinks.
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "/home/{{ user }}/abrazo/{{ item }}"
+    dest: "/home/{{ user }}/.{{ item }}"
+    state: link
+  loop:
+    - alias
+    - bash_profile
+    - bashrc
+    - eslintrc.js
+    - haskeline
+    - mypy.ini
+    - screenrc
+    - shellrc
+    - spacemacs
+    - tmux.conf
+    - toprc
+    - xmobarrc
+
+- name: Create abrazo dotfile hard links.
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "/home/{{ user }}/abrazo/{{ item }}"
+    dest: "/home/{{ user }}/.{{ item }}"
+    state: hard
+  loop:
+    - git_template/
+    - xmonad/
+
+- name: Create abrazo dotfile symlinks.
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "/home/{{ user }}/abrazo/{{ item.src }}"
+    dest: "/home/{{ user }}/{{ item.dest }}"
+  loop:
+    - { src: "config.yaml", dest: ".stack/config.yaml" }
+    - { src: "stack.yaml", dest: ".stack/global-project/stack.yaml" }
+
 - name: Setup abrazo dotfiles.
   become: true
   become_user: "{{ user }}"
