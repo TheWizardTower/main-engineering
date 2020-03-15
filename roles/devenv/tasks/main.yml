@@ -4,6 +4,23 @@
     name: docker
     state: present
 
+- name: Ensure libvirt group is present.
+  group:
+    name: libvirt
+    state: present
+
+- name: Add user to docker group.
+  user:
+    name: "{{ user }}"
+    group: docker
+    append: yes
+
+- name: Add user to docker libvirt.
+  user:
+    name: "{{ user }}"
+    group: libvirt
+    append: yes
+
 - name: Capture Fedora release number.
   # warn: false # the rpm/dnf module doesn't let us do this, so don't chide
   # us to use it.
