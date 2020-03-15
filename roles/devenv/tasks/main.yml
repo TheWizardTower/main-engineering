@@ -519,7 +519,7 @@
 - name: Try to find bass!
   become: true
   become_user: "{{ user }}"
-  shell: "bass ls"
+  shell: "fish -c 'bass ls'"
   ignore_errors: true
   register: bass_output
 
@@ -541,7 +541,7 @@
 - name: Try to find pkgtop!
   become: true
   become_user: "{{ user }}"
-  shell: "pkgtop -v"
+  shell: "bash -c 'pkgtop -v'"
   ignore_errors: true
   register: pkgtop_output
 
@@ -586,7 +586,7 @@
   become_user: "{{ user }}"
   ignore_errors: true
   register: fzf_output
-  shell: "fzf --help"
+  shell: "bash -c 'fzf --help'"
 
 - name: Setup fzf.
   args:
@@ -614,7 +614,7 @@
 - name: Try to find GRC.
   become: true
   become_user: "{{ user }}"
-  shell: "grc"
+  shell: "bash -c 'grc'"
   ignore_errors: true
   register: grc_output
 
@@ -636,7 +636,7 @@
   become_user: "{{ user }}"
   ignore_errors: true
   register: hr_output
-  shell: "hr"
+  shell: "bash -c 'hr'"
 
 - name: Install hr.
   args:
@@ -656,7 +656,7 @@
   become_user: "{{ user }}"
   ignore_errors: true
   register: tig_output
-  shell: "tig --version"
+  shell: "bash -c 'tig --version'"
 
 - name: Build and install tig.
   args:
