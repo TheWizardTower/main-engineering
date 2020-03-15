@@ -619,7 +619,7 @@
     force: true
     mode: u=rwx
     owner: "{{ user }}"
-    url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh "
+    url: "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh"
 
 - name: Install golangci-lint.
   become: true
