@@ -368,7 +368,7 @@
     path: "/home/{{ user }}/.bashrc"
 
 - name: Move bashrc if it's not a link.
-  when: bashrc_stat.islink is not defined or not bashrc_stat.islink
+  when: bashrc_stat.islnk is not defined or not bashrc_stat.islnk
   shell:
     cmd: "mv /home/{{ user }}/.bashrc /home/{{ user }}/.bashrc_stock"
 
@@ -379,7 +379,7 @@
     path: "/home/{{ user }}/.bash_profile "
 
 - name: Move bash_profile if it's not a link.
-  when: bash_prof_stat.islink is not defined or not bash_prof_stat.islink
+  when: bash_prof_stat.islnk is not defined or not bash_prof_stat.islnk
   shell:
     cmd: "mv /home/{{ user }}/.bash_profile /home/{{ user }}/.bash_profile_stock"
 
