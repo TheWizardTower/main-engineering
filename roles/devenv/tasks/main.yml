@@ -216,10 +216,12 @@
     name:
       - NetworkManager-tui
       - docker
+      - libvirt
       - libvirt-daemon-kvm
       - origin
       - origin-web-console
       - qemu-kvm
+      - vagrant
 
 - name: Create ~/local/bin
   file:
