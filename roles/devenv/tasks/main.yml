@@ -33,7 +33,14 @@
 - name: Import mono keys
   shell: "rpmkeys --import 'http://pool.sks-keyservers.net/pks/lookup?op=get&search=0x3fa7e0328081bff6a14da29aa6a19b38d3d831ef'"
 
+- name: Check if Mono repo is installed.
+  register: mono_repo
+  stat:
+    path: "/etc/yum.repos.d/microsoft-prod.repo"
+
 - name: Set up mono repo.
+  when: (mono_repo.exists is not defined or not
+         mono_repo.exists)
   get_url:
     url: "https://download.mono-project.com/repo/centos8-stable.repo"
     dest: "/etc/yum.repos.d/mono-centos8-stable.repo"
@@ -79,12 +86,12 @@
   register: antlr_exec
   ignore_errors: true
   shell:
-    cmd: "antlr4"
+    cmd: "fish -c 'antlr4'"
 
 - name: Get ANTLR V4.
-  when: (antlr.exists is not defined or not
+  when: (antlr.exists is defined and not
          antlr.exists) or
-         (antlr_exec.failed is defined or
+         (antlr_exec.failed is defined and
           antlr_exec.failed)
   get_url:
     url: "https://www.antlr.org/download/antlr-4.7.1-complete.jar"
@@ -185,6 +192,8 @@
       - most
       - npm
       - numactl
+      - openssh
+      - openssh-server
       - pcp-system-tools
       - perl-criticism
       - perltidy
@@ -201,6 +210,11 @@
       - vnstat
       - zsh
 
+- name: Start and enable sshd.
+  systemd:
+    enabled: yes
+    name: sshd
+    state: started
 
 - name: Ensure that Kubernetes is not installed.
   when: "'Microsoft' not in ansible_facts.kernel"
@@ -208,6 +222,7 @@
     state: absent
     name:
       - kubernetes # OpenShift and k8s can't co-exist.
+      - kubernetes-client
 
 - name: Install programs specific to a bare-metal Fedora install.
   when: "'Microsoft' not in ansible_facts.kernel"
@@ -226,7 +241,7 @@
 - name: Get KVM driver.
   get_url:
     dest: "/usr/local/bin/docker-machine-driver-kvm"
-    url: "https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.10.0/docker-machine-driver-kvm-centos7
+    url: "https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.10.0/docker-machine-driver-kvm-centos7"
     mode: +x
 
 - name: Create ~/local/bin
@@ -368,7 +383,7 @@
     path: "/home/{{ user }}/.bashrc"
 
 - name: Move bashrc if it's not a link.
-  when: bashrc_stat.islink is not defined or not bashrc_stat.islink
+  when: bashrc_stat.islnk is not defined or not bashrc_stat.islnk
   shell:
     cmd: "mv /home/{{ user }}/.bashrc /home/{{ user }}/.bashrc_stock"
 
@@ -379,7 +394,7 @@
     path: "/home/{{ user }}/.bash_profile "
 
 - name: Move bash_profile if it's not a link.
-  when: bash_prof_stat.islink is not defined or not bash_prof_stat.islink
+  when: bash_prof_stat.islnk is not defined or not bash_prof_stat.islnk
   shell:
     cmd: "mv /home/{{ user }}/.bash_profile /home/{{ user }}/.bash_profile_stock"
 
@@ -504,7 +519,7 @@
 - name: Try to find bass!
   become: true
   become_user: "{{ user }}"
-  shell: "bass ls"
+  shell: "fish -c 'bass ls'"
   ignore_errors: true
   register: bass_output
 
@@ -526,7 +541,7 @@
 - name: Try to find pkgtop!
   become: true
   become_user: "{{ user }}"
-  shell: "pkgtop -v"
+  shell: "bash -c 'pkgtop -v'"
   ignore_errors: true
   register: pkgtop_output
 
@@ -571,7 +586,7 @@
   become_user: "{{ user }}"
   ignore_errors: true
   register: fzf_output
-  shell: "fzf --help"
+  shell: "bash -c 'fzf --help'"
 
 - name: Setup fzf.
   args:
@@ -599,7 +614,7 @@
 - name: Try to find GRC.
   become: true
   become_user: "{{ user }}"
-  shell: "grc"
+  shell: "bash -c 'grc'"
   ignore_errors: true
   register: grc_output
 
@@ -621,7 +636,7 @@
   become_user: "{{ user }}"
   ignore_errors: true
   register: hr_output
-  shell: "hr"
+  shell: "bash -c 'hr'"
 
 - name: Install hr.
   args:
@@ -641,7 +656,7 @@
   become_user: "{{ user }}"
   ignore_errors: true
   register: tig_output
-  shell: "tig --version"
+  shell: "bash -c 'tig --version'"
 
 - name: Build and install tig.
   args:
