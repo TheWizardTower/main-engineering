@@ -515,6 +515,7 @@
     - { src: 'https://github.com/trapd00r/LS_COLORS.git', dest: 'LS_COLORS' }
     - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
     - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
+    - { src: 'https://github.com/haskell/ghcide.git', dest: 'ghcide' }
 
 - name: Try to find bass!
   become: true
@@ -876,7 +877,6 @@
     - dhall
     - ghc-prof-flamegraph
     - ghcid
-    - ghcide
     - happy
     - hasktags
     - hlint
