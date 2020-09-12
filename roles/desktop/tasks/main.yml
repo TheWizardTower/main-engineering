@@ -52,7 +52,6 @@
       - digikam
       - dkms
       - dmenu
-      - dzen2
       - exfat-utils
       - firefox
       - flash-plugin
@@ -74,7 +73,6 @@
       - libvirt-daemon-driver-vbox
       - libxml++-devel
       - libxml++30-devel
-      - libxml-devel
       - libxml2-static
       - moby-engine
       - moc
