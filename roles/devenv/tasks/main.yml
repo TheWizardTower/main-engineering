@@ -354,6 +354,7 @@
       - black
       - flake8
       - powerline-status
+      - powerline-swissarmyknife
       - pylint
       - yamllint
       - yq
