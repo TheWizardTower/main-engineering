@@ -509,7 +509,6 @@
     - { src: 'https://github.com/kanaka/mal.git', dest: 'mal' }
     - { src: 'https://github.com/kanaka/mal.workshop.git', dest: 'mal.workshop' }
     - { src: 'https://github.com/ndmitchell/ghcid.git', dest: 'ghcid' }
-    - { src: 'https://github.com/orhun/pkgtop.git', dest: 'pkgtop' }
     - { src: 'https://github.com/replicatedhq/dockerfilelint.git', dest: 'dockerfilelint' }
     - { src: 'https://github.com/sboli/twmn.git', dest: 'twmn' }
     - { src: 'https://github.com/tj/git-extras.git', dest: 'git-extras' }
@@ -534,28 +533,6 @@
     (item['item'] == "bass" and
     item['changed'] == "true") or
     (bass_output is defined and bass_output.failed)
-  loop:
-    "{{ gitclone.results }}"
-  loop_control:
-    loop_var: item
-
-- name: Try to find pkgtop!
-  become: true
-  become_user: "{{ user }}"
-  shell: "bash -c 'pkgtop -v'"
-  ignore_errors: true
-  register: pkgtop_output
-
-- name: Build and install pkgtop.
-  become: true
-  become_user: "{{ user }}"
-  shell: "fish -lc 'go get ./...; and go build src/pkgtop.go && mv pkgtop /home/{{ user }}/gocode/bin'"
-  args:
-    chdir: "/home/{{ user }}/git/pkgtop"
-  when:
-    (item['item'] == "pkgtop" and
-    item['changed'] == "true") or
-    (pkgtop_output.failed is defined and pkgtop_output.failed)
   loop:
     "{{ gitclone.results }}"
   loop_control:
