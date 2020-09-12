@@ -503,6 +503,7 @@
     - { src: 'https://github.com/garabik/grc.git', dest: 'grc' }
     - { src: 'https://github.com/girst/solvitaire.git', dest: 'solvitaire' }
     - { src: 'https://github.com/github/hub.git', dest: 'hub' }
+    - { src: 'https://github.com/haskell/ghcide.git', dest: 'ghcide' }
     - { src: 'https://github.com/jonas/tig.git', dest: 'tig' }
     - { src: 'https://github.com/joshuaclayton/unused.git', dest: 'unused' }
     - { src: 'https://github.com/junegunn/fzf.git', dest: 'fzf' }
@@ -515,7 +516,6 @@
     - { src: 'https://github.com/trapd00r/LS_COLORS.git', dest: 'LS_COLORS' }
     - { src: 'https://github.com/unixorn/git-extra-commands.git', dest: 'git-extra-commands' }
     - { src: 'https://gitlab.com/o9000/tint2.git', dest: 'tint2' }
-    - { src: 'https://github.com/haskell/ghcide.git', dest: 'ghcide' }
 
 - name: Try to find bass!
   become: true
