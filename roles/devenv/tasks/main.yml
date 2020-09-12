@@ -921,14 +921,6 @@
     - { name: 'present', resolver: 'lts-14.10' }
     - { name: 'threadscope', resolver: 'lts-14.10' }
 
-- name: Get ELPA GPG key.
-  become: true
-  become_user: "{{ user }}"
-  args:
-    chdir: "/home/{{ user }}"
-  shell:
-    cmd: 'gpg --homedir ~/.emacs.d/elpa/gnupg --receive-keys 066DAFCB81E42C40'
-
 - name: Install/Update Emacs Packages
   become: true
   become_user: "{{ user }}"
