@@ -491,6 +491,8 @@
     - { src: 'https://github.com/DanielG/cabal-helper.git', dest: 'cabal-helper' }
     - { src: 'https://github.com/DanielG/ghc-mod.git', dest: 'ghc-mod' }
     - { src: 'https://github.com/LuRsT/hr.git', dest: 'hr' }
+    - { src: 'https://github.com/TheWizardTower/publish.git', dest: 'publish' }
+    - { src: 'https://github.com/TheWizardTower/technique.git', dest: 'technique' }
     - { src: 'https://github.com/agda/agda.git', dest: 'agda' }
     - { src: 'https://github.com/alanz/HaRe.git', dest: 'HaRe' }
     - { src: 'https://github.com/bobthecow/git-flow-completion.git', dest: 'git-flow-completion', }
