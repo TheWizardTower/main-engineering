@@ -419,17 +419,18 @@
     - tmux.conf
     - toprc
     - xmobarrc
+    - git_template
+    - xmonad
 
-- name: Create abrazo dotfile hard links.
+- name: Ensure stack directory exists.
   become: true
   become_user: "{{ user }}"
   file:
-    src: "/home/{{ user }}/abrazo/{{ item }}"
-    dest: "/home/{{ user }}/.{{ item }}"
-    state: hard
+    path: "/home/{{ user }}/{{ item }}"
+    state: directory
   loop:
-    - git_template/
-    - xmonad/
+    - ".stack/"
+    - ".stack/global-project/"
 
 - name: Create abrazo dotfile symlinks.
   become: true
