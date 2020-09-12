@@ -436,18 +436,17 @@
   become: true
   become_user: "{{ user }}"
   file:
-    src: "/home/{{ user }}/abrazo/{{ item.src }}"
-    dest: "/home/{{ user }}/{{ item.dest }}"
-  loop:
-    - { src: "config.yaml", dest: ".stack/config.yaml" }
-    - { src: "stack.yaml", dest: ".stack/global-project/stack.yaml" }
+    src: "/home/{{ user }}/abrazo/config.yaml"
+    dest: "/home/{{ user }}/.stack/config.yaml"
+    state: link
 
-- name: Setup abrazo dotfiles.
+- name: Create abrazo dotfile symlinks.
   become: true
   become_user: "{{ user }}"
-  shell: "/home/{{ user }}/abrazo/install"
-  args:
-    chdir: "/home/{{ user }}/abrazo"
+  file:
+    src: "/home/{{ user }}/abrazo/stack.yaml"
+    dest: "/home/{{ user }}/.stack/global-project/stack.yaml"
+    state: link
 
 - name: Checkout a copy of Spacemacs.
   become: true
