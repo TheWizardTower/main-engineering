@@ -59,7 +59,7 @@
   dnf:
     state: latest
     name:
-      - "https://raw.githubusercontent.com/rpmsphere/noarch/master/r/rpmsphere-release-30-1.noarch.rpm"
+      - "https://github.com/rpmsphere/noarch/raw/master/r/rpmsphere-release-32-1.noarch.rpm"
 
 - name: Enable RPMFusion Free and Non-Free.
   dnf:
