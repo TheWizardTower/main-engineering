@@ -399,6 +399,14 @@
   shell:
     cmd: "mv /home/{{ user }}/.bash_profile /home/{{ user }}/.bash_profile_stock"
 
+- name: Create abrazo ~/bin symlink
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "/home/{{ user }}/abrazo/bin"
+    dest: "/home/{{ user }}/bin"
+    state: link
+
 - name: Create abrazo dotfile symlinks.
   become: true
   become_user: "{{ user }}"
