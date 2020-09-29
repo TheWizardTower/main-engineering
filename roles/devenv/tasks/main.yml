@@ -171,6 +171,7 @@
       - colorgcc
       - cowsay
       - cppcheck
+      - cloc
       - dash
       - docker
       - emacs
